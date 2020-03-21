@@ -47,12 +47,12 @@ public class Main {
       if (player == 1) {
         int next = onePos + nextNum;
 
-        if (next > 99) {
-          System.out.println("Player one needs to score exactly " + (99 - onePos) + " on dice roll to win. Passing chance.");
+        if (next > 100) {
+          System.out.println("Player one needs to score exactly " + (100 - onePos) + " on dice roll to win. Passing chance.");
           skip = true;
         }
 
-        if (next == 99) {
+        if (next == 100) {
           System.out.println("Player one wins! Game finished.");
           System.exit(1);
         }
@@ -87,12 +87,12 @@ public class Main {
 
         int next = twoPos + nextNum;
 
-        if (next > 99) {
-          System.out.println("Player two needs to score exactly " + (99 - twoPos) + " on dice roll to win. Passing chance.");
+        if (next > 100) {
+          System.out.println("Player two needs to score exactly " + (100 - twoPos) + " on dice roll to win. Passing chance.");
           skip = true;
         }
 
-        if (next == 99) {
+        if (next == 100) {
           System.out.println("Player two wins! Game finished.");
           System.exit(1);
         }
@@ -126,12 +126,12 @@ public class Main {
 
         int next = threePos + nextNum;
 
-        if (next > 99) {
-          System.out.println("Player three needs to score exactly " + (99 - threePos) + " on dice roll to win. Passing chance.");
+        if (next > 100) {
+          System.out.println("Player three needs to score exactly " + (100 - threePos) + " on dice roll to win. Passing chance.");
           skip = true;
         }
 
-        if (next == 99) {
+        if (next == 100) {
           System.out.println("Player three wins! Game finished.");
           System.exit(1);
         }
@@ -165,12 +165,12 @@ public class Main {
 
         int next = fourPos + nextNum;
 
-        if (next > 99) {
-          System.out.println("Player four needs to score exactly " + (99 - fourPos) + " on dice roll to win. Passing chance.");
+        if (next > 100) {
+          System.out.println("Player four needs to score exactly " + (100 - fourPos) + " on dice roll to win. Passing chance.");
           skip = true;
         }
 
-        if (next == 99) {
+        if (next == 100) {
           System.out.println("Player four wins! Game finished.");
           System.exit(1);
         }
