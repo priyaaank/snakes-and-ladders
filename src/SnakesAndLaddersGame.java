@@ -2,7 +2,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class Main {
+public class SnakesAndLaddersGame {
 
   public static void main(String[] args) {
     //declare variables
