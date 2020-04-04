@@ -1,5 +1,8 @@
 package com.snakesandladders.game;
 
+import com.snakesandladders.game.props.RandomDice;
+import com.snakesandladders.game.props.RollBehavior;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -11,8 +14,10 @@ public class SnakesAndLaddersGame {
   private int playerOnePosition = 0, playerTwoPosition = 0, playerThreePosition = 0, playerFourPosition = 0;
   private int activePlayer = 1;
   private boolean skipPositionUpdate = false;
+  private RollBehavior dice;
 
-  public SnakesAndLaddersGame() {
+  public SnakesAndLaddersGame(RollBehavior dice) {
+    this.dice = dice;
     snakesBoardPositions = new HashMap<Integer, Integer>() {
       {
         put(18, 2);
@@ -43,7 +48,7 @@ public class SnakesAndLaddersGame {
   }
 
   public static void main(String[] args) {
-    new SnakesAndLaddersGame().beginGamePlay();
+    new SnakesAndLaddersGame(new RandomDice()).beginGamePlay();
   }
 
   public void beginGamePlay() {
@@ -248,8 +253,7 @@ public class SnakesAndLaddersGame {
 
   //throw number at random
   private Integer rollDice() {
-    Random rand = new Random();
-    return rand.nextInt(6) + 1;
+    return this.dice.roll();
   }
 
 }
