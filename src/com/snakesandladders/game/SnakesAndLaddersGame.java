@@ -1,11 +1,12 @@
 package com.snakesandladders.game;
 
+import com.snakesandladders.game.io.ConsoleLogger;
+import com.snakesandladders.game.io.Logger;
 import com.snakesandladders.game.props.RandomDice;
 import com.snakesandladders.game.props.RollBehavior;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 public class SnakesAndLaddersGame {
 
@@ -15,9 +16,11 @@ public class SnakesAndLaddersGame {
   private int activePlayer = 1;
   private boolean skipPositionUpdate = false;
   private RollBehavior dice;
+  private Logger msgLogger;
 
-  public SnakesAndLaddersGame(RollBehavior dice) {
+  public SnakesAndLaddersGame(RollBehavior dice, Logger msgLogger) {
     this.dice = dice;
+    this.msgLogger = msgLogger;
     snakesBoardPositions = new HashMap<Integer, Integer>() {
       {
         put(18, 2);
@@ -48,7 +51,7 @@ public class SnakesAndLaddersGame {
   }
 
   public static void main(String[] args) {
-    new SnakesAndLaddersGame(new RandomDice()).beginGamePlay();
+    new SnakesAndLaddersGame(new RandomDice(), new ConsoleLogger()).beginGamePlay();
   }
 
   public void beginGamePlay() {
@@ -224,7 +227,7 @@ public class SnakesAndLaddersGame {
   }
 
   private void logMessage(String message) {
-    System.out.println(message);
+    msgLogger.log(message);
   }
 
   private boolean chancedUponALadder(Map<Integer, Integer> ladderBoardPositions, int newPosition) {
