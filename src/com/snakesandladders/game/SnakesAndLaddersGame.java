@@ -47,34 +47,34 @@ public class SnakesAndLaddersGame {
     while (true) {
 
       int newHopCount = rollDice();
-      System.out.println("Player " + activePlayer + " got dice roll of " + newHopCount);
+      logMessage("Player " + activePlayer + " got dice roll of " + newHopCount);
 
       if (activePlayer == 1) {
         int newPosition = playerOnePosition + newHopCount;
 
         if (hopsNotPossible(newPosition)) {
-          System.out.println("Player one needs to score exactly " + (100 - playerOnePosition) + " on dice roll to win. Passing chance.");
+          logMessage("Player one needs to score exactly " + (100 - playerOnePosition) + " on dice roll to win. Passing chance.");
           skipPositionUpdate = true;
         }
 
         if (reachedWinningPosition(newPosition)) {
-          System.out.println("Player one wins! Game finished.");
+          logMessage("Player one wins! Game finished.");
           System.exit(1);
         }
 
         if (yetToStart(playerOnePosition) && hasntRolledASix(newHopCount)) {
-          System.out.println("Player one did not score 6. First a 6 needs to be scored to start moving on board.");
+          logMessage("Player one did not score 6. First a 6 needs to be scored to start moving on board.");
           skipPositionUpdate = true;
         }
 
         if (bittenBySnake(snakesBoardPositions, newPosition)) {
-          System.out.println("Player got bit by snake a position " + newPosition);
+          logMessage("Player got bit by snake a position " + newPosition);
           playerOnePosition = snakesBoardPositions.get(newPosition);
           skipPositionUpdate = true;
         }
 
         if (chancedUponALadder(ladderBoardPositions, newPosition)) {
-          System.out.println("Player got chanced upon a ladder at position " + newPosition + "!");
+          logMessage("Player got chanced upon a ladder at position " + newPosition + "!");
           playerOnePosition = ladderBoardPositions.get(newPosition);
           skipPositionUpdate = true;
         }
@@ -83,38 +83,38 @@ public class SnakesAndLaddersGame {
           playerOnePosition = newPosition;
         }
 
-        System.out.println("Next position for player one is " + playerOnePosition);
+        logMessage("Next position for player one is " + playerOnePosition);
         skipPositionUpdate = false;
         activePlayer = 2;
-        System.out.println("Player two will play next turn");
+        logMessage("Player two will play next turn");
 
       } else if (activePlayer == 2) {
 
         int newPosition = playerTwoPosition + newHopCount;
 
         if (hopsNotPossible(newPosition)) {
-          System.out.println("Player two needs to score exactly " + (100 - playerTwoPosition) + " on dice roll to win. Passing chance.");
+          logMessage("Player two needs to score exactly " + (100 - playerTwoPosition) + " on dice roll to win. Passing chance.");
           skipPositionUpdate = true;
         }
 
         if (reachedWinningPosition(newPosition)) {
-          System.out.println("Player two wins! Game finished.");
+          logMessage("Player two wins! Game finished.");
           System.exit(1);
         }
 
         if (yetToStart(playerTwoPosition) && hasntRolledASix(newHopCount)) {
-          System.out.println("Player two did not score 6. First a 6 needs to be scored to start moving on board.");
+          logMessage("Player two did not score 6. First a 6 needs to be scored to start moving on board.");
           skipPositionUpdate = true;
         }
 
         if (bittenBySnake(snakesBoardPositions, newPosition)) {
-          System.out.println("Player got bit by snake a position " + newPosition);
+          logMessage("Player got bit by snake a position " + newPosition);
           playerTwoPosition = snakesBoardPositions.get(newPosition);
           skipPositionUpdate = true;
         }
 
         if (chancedUponALadder(ladderBoardPositions, newPosition)) {
-          System.out.println("Player got chanced upon a ladder at position " + newPosition + "!");
+          logMessage("Player got chanced upon a ladder at position " + newPosition + "!");
           playerTwoPosition = ladderBoardPositions.get(newPosition);
           skipPositionUpdate = true;
         }
@@ -122,38 +122,38 @@ public class SnakesAndLaddersGame {
         if (!skipPositionUpdate) {
           playerTwoPosition = newPosition;
         }
-        System.out.println("Next position for player two is " + playerTwoPosition);
+        logMessage("Next position for player two is " + playerTwoPosition);
         skipPositionUpdate = false;
         activePlayer = 3;
-        System.out.println("Player three will play next turn");
+        logMessage("Player three will play next turn");
 
       } else if (activePlayer == 3) {
 
         int newPosition = playerThreePosition + newHopCount;
 
         if (hopsNotPossible(newPosition)) {
-          System.out.println("Player three needs to score exactly " + (100 - playerThreePosition) + " on dice roll to win. Passing chance.");
+          logMessage("Player three needs to score exactly " + (100 - playerThreePosition) + " on dice roll to win. Passing chance.");
           skipPositionUpdate = true;
         }
 
         if (reachedWinningPosition(newPosition)) {
-          System.out.println("Player three wins! Game finished.");
+          logMessage("Player three wins! Game finished.");
           System.exit(1);
         }
 
         if (yetToStart(playerThreePosition) && hasntRolledASix(newHopCount)) {
-          System.out.println("Player three did not score 6. First a 6 needs to be scored to start moving on board.");
+          logMessage("Player three did not score 6. First a 6 needs to be scored to start moving on board.");
           skipPositionUpdate = true;
         }
 
         if (bittenBySnake(snakesBoardPositions, newPosition)) {
-          System.out.println("Player got bit by snake a position " + newPosition);
+          logMessage("Player got bit by snake a position " + newPosition);
           playerThreePosition = snakesBoardPositions.get(newPosition);
           skipPositionUpdate = true;
         }
 
         if (chancedUponALadder(ladderBoardPositions, newPosition)) {
-          System.out.println("Player got chanced upon a ladder at position " + newPosition + "!");
+          logMessage("Player got chanced upon a ladder at position " + newPosition + "!");
           playerThreePosition = ladderBoardPositions.get(newPosition);
           skipPositionUpdate = true;
         }
@@ -161,38 +161,38 @@ public class SnakesAndLaddersGame {
         if (!skipPositionUpdate) {
           playerThreePosition = newPosition;
         }
-        System.out.println("Next position for player three is " + playerThreePosition);
+        logMessage("Next position for player three is " + playerThreePosition);
         skipPositionUpdate = false;
         activePlayer = 4;
-        System.out.println("Player four will play next turn");
+        logMessage("Player four will play next turn");
 
       } else if (activePlayer == 4) {
 
         int newPosition = playerFourPosition + newHopCount;
 
         if (hopsNotPossible(newPosition)) {
-          System.out.println("Player four needs to score exactly " + (100 - playerFourPosition) + " on dice roll to win. Passing chance.");
+          logMessage("Player four needs to score exactly " + (100 - playerFourPosition) + " on dice roll to win. Passing chance.");
           skipPositionUpdate = true;
         }
 
         if (reachedWinningPosition(newPosition)) {
-          System.out.println("Player four wins! Game finished.");
+          logMessage("Player four wins! Game finished.");
           System.exit(1);
         }
 
         if (yetToStart(playerFourPosition) && hasntRolledASix(newHopCount)) {
-          System.out.println("Player four did not score 6. First a 6 needs to be scored to start moving on board.");
+          logMessage("Player four did not score 6. First a 6 needs to be scored to start moving on board.");
           skipPositionUpdate = true;
         }
 
         if (bittenBySnake(snakesBoardPositions, newPosition)) {
-          System.out.println("Player got bit by snake a position " + newPosition);
+          logMessage("Player got bit by snake a position " + newPosition);
           playerFourPosition = snakesBoardPositions.get(newPosition);
           skipPositionUpdate = true;
         }
 
         if (chancedUponALadder(ladderBoardPositions, newPosition)) {
-          System.out.println("Player got chanced upon a ladder at position " + newPosition + "!");
+          logMessage("Player got chanced upon a ladder at position " + newPosition + "!");
           playerFourPosition = ladderBoardPositions.get(newPosition);
           skipPositionUpdate = true;
         }
@@ -200,14 +200,18 @@ public class SnakesAndLaddersGame {
         if (!skipPositionUpdate) {
           playerFourPosition = newPosition;
         }
-        System.out.println("Next position for player four is " + playerFourPosition);
+        logMessage("Next position for player four is " + playerFourPosition);
         skipPositionUpdate = false;
         activePlayer = 1;
-        System.out.println("Player one will play next turn");
+        logMessage("Player one will play next turn");
       }
 
     }
 
+  }
+
+  private void logMessage(String message) {
+    System.out.println(message);
   }
 
   private boolean chancedUponALadder(Map<Integer, Integer> ladderBoardPositions, int newPosition) {
