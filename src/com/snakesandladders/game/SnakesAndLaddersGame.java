@@ -6,13 +6,14 @@ import java.util.Random;
 
 public class SnakesAndLaddersGame {
 
-  public static void main(String[] args) {
-    new SnakesAndLaddersGame().beginGamePlay();
-  }
+  private Map<Integer, Integer> snakesBoardPositions;
+  private Map<Integer, Integer> ladderBoardPositions;
+  private int playerOnePosition = 0, playerTwoPosition = 0, playerThreePosition = 0, playerFourPosition = 0;
+  private int activePlayer = 1;
+  private boolean skipPositionUpdate = false;
 
-  public void beginGamePlay() {
-    //declare variables
-    Map<Integer, Integer> snakesBoardPositions = new HashMap<Integer, Integer>() {
+  public SnakesAndLaddersGame() {
+    snakesBoardPositions = new HashMap<Integer, Integer>() {
       {
         put(18, 2);
         put(25, 8);
@@ -26,7 +27,8 @@ public class SnakesAndLaddersGame {
         put(97, 5);
       }
     };
-    Map<Integer, Integer> ladderBoardPositions = new HashMap<Integer, Integer>() {
+
+    ladderBoardPositions = new HashMap<Integer, Integer>() {
       {
         put(9, 32);
         put(12, 53);
@@ -38,11 +40,13 @@ public class SnakesAndLaddersGame {
         put(63, 88);
       }
     };
-    int activePlayer = 1;
-    int playerOnePosition = 0, playerTwoPosition = 0, playerThreePosition = 0, playerFourPosition = 0;
-    boolean skipPositionUpdate = false;
+  }
 
+  public static void main(String[] args) {
+    new SnakesAndLaddersGame().beginGamePlay();
+  }
 
+  public void beginGamePlay() {
     //continue to play the game until it is over
     while (true) {
 
