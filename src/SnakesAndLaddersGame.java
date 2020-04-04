@@ -5,6 +5,10 @@ import java.util.Random;
 public class SnakesAndLaddersGame {
 
   public static void main(String[] args) {
+    new SnakesAndLaddersGame().beginGamePlay();
+  }
+
+  public void beginGamePlay() {
     //declare variables
     Map<Integer, Integer> snakesBoardPositions = new HashMap<Integer, Integer>() {
       {
@@ -204,23 +208,23 @@ public class SnakesAndLaddersGame {
 
   }
 
-  private static boolean chancedUponALadder(Map<Integer, Integer> ladderBoardPositions, int newPosition) {
+  private boolean chancedUponALadder(Map<Integer, Integer> ladderBoardPositions, int newPosition) {
     return ladderBoardPositions.get(newPosition) != null;
   }
 
-  private static boolean bittenBySnake(Map<Integer, Integer> snakesBoardPositions, int newPosition) {
+  private boolean bittenBySnake(Map<Integer, Integer> snakesBoardPositions, int newPosition) {
     return snakesBoardPositions.get(newPosition) != null;
   }
 
-  private static boolean hasntRolledASix(int newHopCount) {
+  private boolean hasntRolledASix(int newHopCount) {
     return newHopCount != 6;
   }
 
-  private static boolean yetToStart(int playerOnePosition) {
+  private boolean yetToStart(int playerOnePosition) {
     return playerOnePosition == 0;
   }
 
-  private static boolean reachedWinningPosition(int newPosition) {
+  private boolean reachedWinningPosition(int newPosition) {
     return newPosition == 100;
   }
 
