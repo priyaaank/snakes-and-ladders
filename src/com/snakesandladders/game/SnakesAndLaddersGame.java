@@ -4,6 +4,8 @@ import com.snakesandladders.game.io.ConsoleLogger;
 import com.snakesandladders.game.io.Logger;
 import com.snakesandladders.game.props.RandomDice;
 import com.snakesandladders.game.props.RollBehavior;
+import com.snakesandladders.game.state.BoardGameController;
+import com.snakesandladders.game.state.BoardGameEvents;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,10 +19,12 @@ public class SnakesAndLaddersGame {
   private boolean skipPositionUpdate = false;
   private RollBehavior dice;
   private Logger msgLogger;
+  private BoardGameEvents controller;
 
-  public SnakesAndLaddersGame(RollBehavior dice, Logger msgLogger) {
+  public SnakesAndLaddersGame(RollBehavior dice, Logger msgLogger, BoardGameEvents controller) {
     this.dice = dice;
     this.msgLogger = msgLogger;
+    this.controller = controller;
     snakesBoardPositions = new HashMap<Integer, Integer>() {
       {
         put(18, 2);
@@ -51,7 +55,7 @@ public class SnakesAndLaddersGame {
   }
 
   public static void main(String[] args) {
-    new SnakesAndLaddersGame(new RandomDice(), new ConsoleLogger()).beginGamePlay();
+    new SnakesAndLaddersGame(new RandomDice(), new ConsoleLogger(), new BoardGameController()).beginGamePlay();
   }
 
   public void beginGamePlay() {
@@ -223,7 +227,7 @@ public class SnakesAndLaddersGame {
   }
 
   private void endGame() {
-    System.exit(1);
+    this.controller.finished();
   }
 
   private void logMessage(String message) {
