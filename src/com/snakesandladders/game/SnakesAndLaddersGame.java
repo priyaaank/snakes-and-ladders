@@ -6,6 +6,7 @@ import com.snakesandladders.game.props.RandomDice;
 import com.snakesandladders.game.props.RollBehavior;
 import com.snakesandladders.game.state.BoardGameController;
 import com.snakesandladders.game.state.BoardGameEvents;
+import com.snakesandladders.game.state.Turn;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +16,6 @@ public class SnakesAndLaddersGame {
     private Map<Integer, Integer> snakesBoardPositions;
     private Map<Integer, Integer> ladderBoardPositions;
     private int activePlayer = 1;
-    private boolean skipPositionUpdate = false;
     private RollBehavior dice;
     private Logger msgLogger;
     private BoardGameEvents controller;
@@ -70,65 +70,66 @@ public class SnakesAndLaddersGame {
                 String currentPlayerNum = "one";
                 int nextPlayerNum = 2;
                 String nextPlayerNumStr = "two";
-                playerOnePosition = takeTurn(playerOnePosition, newHopCount, currentPlayerNum, nextPlayerNum, nextPlayerNumStr);
+                playerOnePosition = takeTurn(playerOnePosition, newHopCount, currentPlayerNum).nextPosition();
+                passTurnToNextPlayer(playerOnePosition, currentPlayerNum, nextPlayerNum, nextPlayerNumStr);
             } else if (activePlayer == 2) {
                 String currentPlayerNum = "two";
                 int nextPlayerNum = 3;
                 String nextPlayerNumStr = "three";
-                playerTwoPosition = takeTurn(playerTwoPosition, newHopCount, currentPlayerNum, nextPlayerNum, nextPlayerNumStr);
+                playerTwoPosition = takeTurn(playerTwoPosition, newHopCount, currentPlayerNum).nextPosition();
+                passTurnToNextPlayer(playerTwoPosition, currentPlayerNum, nextPlayerNum, nextPlayerNumStr);
             } else if (activePlayer == 3) {
                 String currentPlayerNum = "three";
                 int nextPlayerNum = 4;
                 String nextPlayerNumStr = "four";
-                playerThreePosition = takeTurn(playerThreePosition, newHopCount, currentPlayerNum, nextPlayerNum, nextPlayerNumStr);
+                playerThreePosition = takeTurn(playerThreePosition, newHopCount, currentPlayerNum).nextPosition();
+                passTurnToNextPlayer(playerThreePosition, currentPlayerNum, nextPlayerNum, nextPlayerNumStr);
             } else if (activePlayer == 4) {
                 String currentPlayerNum = "four";
                 int nextPlayerNum = 1;
                 String nextPlayerNumStr = "one";
-                playerFourPosition = takeTurn(playerFourPosition, newHopCount, currentPlayerNum, nextPlayerNum, nextPlayerNumStr);
+                playerFourPosition = takeTurn(playerFourPosition, newHopCount, currentPlayerNum).nextPosition();
+                passTurnToNextPlayer(playerFourPosition, currentPlayerNum, nextPlayerNum, nextPlayerNumStr);
             }
+
         }
     }
 
-    private int takeTurn(int playerOnePosition, int newHopCount, String currentPlayerNum, int nextPlayerNum, String nextPlayerNumStr) {
-        int newPosition = playerOnePosition + newHopCount;
+    private Turn takeTurn(int playerCurrentPosition, int newHopCount, String currentPlayerNum) {
+        Turn turn = Turn.advanceBy(playerCurrentPosition, newHopCount);
 
-        if (hopsNotPossible(newPosition)) {
-            logMessage("Player " + currentPlayerNum + " needs to score exactly " + (100 - playerOnePosition) + " on dice roll to win. Passing chance.");
-            skipPositionUpdate = true;
+        if (hopsNotPossible(turn.nextPosition())) {
+            logMessage("Player " + currentPlayerNum + " needs to score exactly " + (100 - playerCurrentPosition) + " on dice roll to win. Passing chance.");
+            return Turn.skipTurn(playerCurrentPosition);
         }
 
-        if (reachedWinningPosition(newPosition)) {
+        if (reachedWinningPosition(turn.nextPosition())) {
             logMessage("Player " + currentPlayerNum + " wins! Game finished.");
             endGame();
         }
 
-        if (yetToStart(playerOnePosition) && hasntRolledASix(newHopCount)) {
+        if (yetToStart(playerCurrentPosition) && hasntRolledASix(newHopCount)) {
             logMessage("Player " + currentPlayerNum + " did not score 6. First a 6 needs to be scored to start moving on board.");
-            skipPositionUpdate = true;
+            return Turn.skipTurn(playerCurrentPosition);
         }
 
-        if (bittenBySnake(snakesBoardPositions, newPosition)) {
-            logMessage("Player got bit by snake a position " + newPosition);
-            playerOnePosition = snakesBoardPositions.get(newPosition);
-            skipPositionUpdate = true;
+        if (bittenBySnake(snakesBoardPositions, turn.nextPosition())) {
+            logMessage("Player got bit by snake a position " + turn.nextPosition());
+            return Turn.advanceTo(snakesBoardPositions.get(turn.nextPosition()));
         }
 
-        if (chancedUponALadder(ladderBoardPositions, newPosition)) {
-            logMessage("Player got chanced upon a ladder at position " + newPosition + "!");
-            playerOnePosition = ladderBoardPositions.get(newPosition);
-            skipPositionUpdate = true;
+        if (chancedUponALadder(ladderBoardPositions, turn.nextPosition())) {
+            logMessage("Player got chanced upon a ladder at position " + turn.nextPosition() + "!");
+            return Turn.advanceTo(ladderBoardPositions.get(turn.nextPosition()));
         }
 
-        if (!skipPositionUpdate) {
-            playerOnePosition = newPosition;
-        }
+        return turn;
+    }
 
-        logMessage("Next position for player " + currentPlayerNum + " is " + playerOnePosition);
-        skipPositionUpdate = false;
+    private void passTurnToNextPlayer(int playerCurrentPosition, String currentPlayerNum, int nextPlayerNum, String nextPlayerNumStr) {
+        logMessage("Next position for player " + currentPlayerNum + " is " + playerCurrentPosition);
         this.activePlayer = nextPlayerNum;
         logMessage("Player " + nextPlayerNumStr + " will play next turn");
-        return playerOnePosition;
     }
 
     private void endGame() {
