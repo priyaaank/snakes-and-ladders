@@ -59,7 +59,7 @@ public class SnakesAndLaddersGame {
 
         if (reachedWinningPosition(newPosition)) {
           logMessage("Player one wins! Game finished.");
-          System.exit(1);
+          endGame();
         }
 
         if (yetToStart(playerOnePosition) && hasntRolledASix(newHopCount)) {
@@ -99,7 +99,7 @@ public class SnakesAndLaddersGame {
 
         if (reachedWinningPosition(newPosition)) {
           logMessage("Player two wins! Game finished.");
-          System.exit(1);
+          endGame();
         }
 
         if (yetToStart(playerTwoPosition) && hasntRolledASix(newHopCount)) {
@@ -138,7 +138,7 @@ public class SnakesAndLaddersGame {
 
         if (reachedWinningPosition(newPosition)) {
           logMessage("Player three wins! Game finished.");
-          System.exit(1);
+          endGame();
         }
 
         if (yetToStart(playerThreePosition) && hasntRolledASix(newHopCount)) {
@@ -177,7 +177,7 @@ public class SnakesAndLaddersGame {
 
         if (reachedWinningPosition(newPosition)) {
           logMessage("Player four wins! Game finished.");
-          System.exit(1);
+          endGame();
         }
 
         if (yetToStart(playerFourPosition) && hasntRolledASix(newHopCount)) {
@@ -210,6 +210,10 @@ public class SnakesAndLaddersGame {
 
   }
 
+  private void endGame() {
+    System.exit(1);
+  }
+
   private void logMessage(String message) {
     System.out.println(message);
   }
@@ -234,12 +238,12 @@ public class SnakesAndLaddersGame {
     return newPosition == 100;
   }
 
-  private static boolean hopsNotPossible(int newPosition) {
+  private boolean hopsNotPossible(int newPosition) {
     return newPosition > 100;
   }
 
   //throw number at random
-  private static Integer rollDice() {
+  private Integer rollDice() {
     Random rand = new Random();
     return rand.nextInt(6) + 1;
   }
