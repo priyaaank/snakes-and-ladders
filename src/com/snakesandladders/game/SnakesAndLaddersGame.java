@@ -67,7 +67,7 @@ public class SnakesAndLaddersGame {
         while (true) {
             currentPlayer = gameBoard.currentPlayer();
             String currentPlayerNum = currentPlayer.getName();
-            gameBoard.updatePlayerPosition(SnakesAndLaddersGame.this::endGame);
+            gameBoard.takeTurn(SnakesAndLaddersGame.this::endGame);
 
             gameBoard.moveToNextPlayer();
             nextPlayer = gameBoard.currentPlayer();

@@ -40,4 +40,8 @@ public class Player {
         messageLogger.log("Player " + number + " got dice roll of " + newHopCount);
         return Turn.advanceBy(position, newHopCount);
     }
+
+    public void updatePosition(Turn turn) {
+        this.position = turn.nextPosition();
+    }
 }

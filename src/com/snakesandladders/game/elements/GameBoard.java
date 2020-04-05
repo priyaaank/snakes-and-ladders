@@ -64,29 +64,26 @@ public class GameBoard {
         return ladderBoardPositions.get(newPosition) != null;
     }
 
-    private Turn takeTurn(Player player, GameEventsListener gameEventsListener) {
-        Turn turn = player.takeTurn();
+    public void takeTurn(GameEventsListener gameEventsListener) {
+        Player currentPlayer = currentPlayer();
+        Turn turn = currentPlayer.takeTurn();
 
         if (hopsNotPossible(turn.nextPosition())) {
-            messageLogger.log("Player " + player.getName() + " needs to score exactly " + (100 - player.getPosition()) + " on dice roll to win. Passing chance.");
-            return Turn.skipTurn(player.getPosition());
+            messageLogger.log("Player " + currentPlayer.getName() + " needs to score exactly " + (100 - currentPlayer.getPosition()) + " on dice roll to win. Passing chance.");
+            turn = Turn.skipTurn(currentPlayer.getPosition());
+        } else {
+            if (reachedWinningPosition(turn.nextPosition())) {
+                messageLogger.log("Player " + currentPlayer.getName() + " wins! Game finished.");
+                gameEventsListener.gameFinished();
+            }
+            if (yetToStart(currentPlayer.getPosition()) && !turn.hasRolledASix()) {
+                messageLogger.log("Player " + currentPlayer.getName() + " did not score 6. First a 6 needs to be scored to start moving on board.");
+                turn = Turn.skipTurn(currentPlayer.getPosition());
+            } else {
+                turn = evaluateTurn(turn);
+            }
         }
 
-        if (reachedWinningPosition(turn.nextPosition())) {
-            messageLogger.log("Player " + player.getName() + " wins! Game finished.");
-            gameEventsListener.gameFinished();
-        }
-
-        if (yetToStart(player.getPosition()) && !turn.hasRolledASix()) {
-            messageLogger.log("Player " + player.getName() + " did not score 6. First a 6 needs to be scored to start moving on board.");
-            return Turn.skipTurn(player.getPosition());
-        }
-
-        return evaluateTurn(turn);
-    }
-
-    public void updatePlayerPosition(GameEventsListener gameEventsListener) {
-        Integer nextPosition = takeTurn(currentPlayer(), gameEventsListener).nextPosition();
-        currentPlayer().setPosition(nextPosition);
+        currentPlayer().updatePosition(turn);
     }
 }

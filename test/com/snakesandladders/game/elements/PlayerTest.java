@@ -53,4 +53,13 @@ class PlayerTest {
 
         assertEquals(14, newTurn.nextPosition());
     }
+
+    @Test
+    void shouldUpdatePositionBasedUsingTurn() {
+        Player playerOne = new Player(1, "one", new ProgrammableDice(2), logger);
+
+        playerOne.updatePosition(Turn.advanceBy(3, 3));
+
+        assertEquals(6, playerOne.getPosition());
+    }
 }
