@@ -1,6 +1,8 @@
 package com.snakesandladders.game.elements;
 
 import com.snakesandladders.game.io.Logger;
+import com.snakesandladders.game.rules.RuleEvaluationListener;
+import com.snakesandladders.game.rules.RuleEvaluator;
 import com.snakesandladders.game.state.Turn;
 
 public class Player {
@@ -31,10 +33,10 @@ public class Player {
         return this.position;
     }
 
-    public Turn takeTurn() {
+    public void takeTurn(RuleEvaluator ruleEvaluator, RuleEvaluationListener ruleEvaluationListener) {
         Integer newHopCount = dice.roll();
         messageLogger.log("Player " + number + " got dice roll of " + newHopCount);
-        return Turn.advanceBy(position, newHopCount);
+        ruleEvaluator.evaluateRules(this, Turn.advanceBy(position, newHopCount), ruleEvaluationListener);
     }
 
     public void updatePosition(Turn turn) {

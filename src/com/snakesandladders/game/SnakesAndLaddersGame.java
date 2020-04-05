@@ -57,7 +57,7 @@ public class SnakesAndLaddersGame {
         );
 
         new SnakesAndLaddersGame(
-                new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger, new RuleEvaluator(snakesBoardPositions, ladderBoardPositions, msgLogger))
+                new GameBoard(playerGroup, msgLogger, new RuleEvaluator(snakesBoardPositions, ladderBoardPositions, msgLogger))
         ).beginGamePlay();
     }
 

@@ -48,22 +48,8 @@ class GameBoardTest {
 
     @BeforeEach
     void setUp() {
-        gameBoard = new GameBoard(snakesBoardPositions, ladderBoardPositions,
+        gameBoard = new GameBoard(
                 new PlayerGroup(playerOne, playerTwo), logger, new RuleEvaluator(snakesBoardPositions, ladderBoardPositions, logger));
-    }
-
-    @Test
-    void shouldUpdateTurnWithSnakeBiteWhenLandsOnASnake() {
-        Turn updatedTurn = gameBoard.evaluateTurn(Turn.advanceTo(38));
-
-        assertEquals(11, updatedTurn.nextPosition());
-    }
-
-    @Test
-    void shouldUpdateTurnWithLadderEndWhenLandsOnALadder() {
-        Turn updatedTurn = gameBoard.evaluateTurn(Turn.advanceTo(12));
-
-        assertEquals(53, updatedTurn.nextPosition());
     }
 
     @Test

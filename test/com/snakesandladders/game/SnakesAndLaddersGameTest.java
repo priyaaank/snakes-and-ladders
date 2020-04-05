@@ -58,7 +58,7 @@ public class SnakesAndLaddersGameTest {
         playerThree = new Player(3, "three", dice, msgLogger);
         playerFour = new Player(4, "four", dice, msgLogger);
         PlayerGroup playerGroup = new PlayerGroup(playerOne, playerTwo, playerThree, playerFour);
-        snakesAndLaddersGame = new SnakesAndLaddersGame(new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger, new RuleEvaluator(snakesBoardPositions, ladderBoardPositions, msgLogger)));
+        snakesAndLaddersGame = new SnakesAndLaddersGame(new GameBoard(playerGroup, msgLogger, new RuleEvaluator(snakesBoardPositions, ladderBoardPositions, msgLogger)));
 
         snakesAndLaddersGame.beginGamePlay();
 
