@@ -88,4 +88,10 @@ public class GameBoard {
 
         return evaluateTurn(turn);
     }
+
+    public void updatePlayerPosition(int newHopCount, GameEventsListener gameEventsListener) {
+        Player currentPlayer = currentPlayer();
+        Integer nextPosition = takeTurn(currentPlayer.getPosition(), newHopCount, currentPlayer.getName(), gameEventsListener).nextPosition();
+        currentPlayer.setPosition(nextPosition);
+    }
 }

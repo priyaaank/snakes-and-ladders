@@ -5,7 +5,6 @@ import com.snakesandladders.game.io.ConsoleLogger;
 import com.snakesandladders.game.io.Logger;
 import com.snakesandladders.game.state.BoardGameController;
 import com.snakesandladders.game.state.BoardGameEvents;
-import com.snakesandladders.game.state.GameEventsListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,15 +68,14 @@ public class SnakesAndLaddersGame {
         //continue to play the game until it is over
         while (true) {
             currentPlayer = gameBoard.currentPlayer();
-            gameBoard.moveToNextPlayer();
-            nextPlayer = gameBoard.currentPlayer();
-
             int newHopCount = rollDice();
             logMessage("Player " + currentPlayer.getNumber() + " got dice roll of " + newHopCount);
-
             String currentPlayerNum = currentPlayer.getName();
+            gameBoard.updatePlayerPosition(newHopCount, SnakesAndLaddersGame.this::endGame);
+
+            gameBoard.moveToNextPlayer();
+            nextPlayer = gameBoard.currentPlayer();
             String nextPlayerNumStr = nextPlayer.getName();
-            currentPlayer.setPosition(gameBoard.takeTurn(currentPlayer.getPosition(), newHopCount, currentPlayerNum, SnakesAndLaddersGame.this::endGame).nextPosition());
             logMessage("Next position for player " + currentPlayerNum + " is " + currentPlayer.getPosition());
             logMessage("Player " + nextPlayerNumStr + " will play next turn");
         }
