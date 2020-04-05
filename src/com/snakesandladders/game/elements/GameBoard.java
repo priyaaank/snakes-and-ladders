@@ -50,10 +50,6 @@ public class GameBoard {
         return newPosition > 100;
     }
 
-    public boolean reachedWinningPosition(int newPosition) {
-        return newPosition == 100;
-    }
-
     public boolean yetToStart(int playerOnePosition) {
         return playerOnePosition == 0;
     }
@@ -74,7 +70,7 @@ public class GameBoard {
             messageLogger.log("Player " + currentPlayer.getName() + " needs to score exactly " + (100 - currentPlayer.getPosition()) + " on dice roll to win. Passing chance.");
             turn = Turn.skipTurn(currentPlayer.getPosition());
         } else {
-            if (reachedWinningPosition(turn.nextPosition())) {
+            if (turn.hasReachedHundred()) {
                 messageLogger.log("Player " + currentPlayer.getName() + " wins! Game finished.");
                 gameEventsListener.gameFinished();
             }
