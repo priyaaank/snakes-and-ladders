@@ -7,7 +7,6 @@ import java.util.Map;
 
 public class GameBoard {
 
-
     private final Map<Integer, Integer> snakesBoardPositions;
     private final Map<Integer, Integer> ladderBoardPositions;
     private final Logger messageLogger;
@@ -18,15 +17,8 @@ public class GameBoard {
         this.messageLogger = messageLogger;
     }
 
-    public boolean bittenBySnake(int newPosition) {
-        return snakesBoardPositions.get(newPosition) != null;
-    }
-
-    public boolean chancedUponALadder(int newPosition) {
-        return ladderBoardPositions.get(newPosition) != null;
-    }
-
     public Turn evaluateTurn(Turn currentTurn) {
+
         if(bittenBySnake(currentTurn.nextPosition())) {
             messageLogger.log("Player got bit by snake a position " + currentTurn.nextPosition());
             return Turn.advanceTo(snakesBoardPositions.get(currentTurn.nextPosition()));
@@ -38,6 +30,14 @@ public class GameBoard {
         }
 
         return currentTurn;
+    }
+
+    private boolean bittenBySnake(int newPosition) {
+        return snakesBoardPositions.get(newPosition) != null;
+    }
+
+    private boolean chancedUponALadder(int newPosition) {
+        return ladderBoardPositions.get(newPosition) != null;
     }
 
 }
