@@ -5,7 +5,7 @@ import com.snakesandladders.game.io.ConsoleLogger;
 import com.snakesandladders.game.io.Logger;
 import com.snakesandladders.game.state.BoardGameController;
 import com.snakesandladders.game.state.BoardGameEvents;
-import com.snakesandladders.game.state.Turn;
+import com.snakesandladders.game.state.GameEventsListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -75,37 +75,11 @@ public class SnakesAndLaddersGame {
             logMessage("Player " + currentPlayer.getNumber() + " got dice roll of " + newHopCount);
 
             String currentPlayerNum = currentPlayer.getName();
-            int nextPlayerNum = nextPlayer.getNumber();
             String nextPlayerNumStr = nextPlayer.getName();
-            currentPlayer.setPosition(takeTurn(currentPlayer.getPosition(), newHopCount, currentPlayerNum).nextPosition());
-            passTurnToNextPlayer(currentPlayer.getPosition(), currentPlayerNum, nextPlayerNum, nextPlayerNumStr);
+            currentPlayer.setPosition(gameBoard.takeTurn(currentPlayer.getPosition(), newHopCount, currentPlayerNum, SnakesAndLaddersGame.this::endGame).nextPosition());
+            logMessage("Next position for player " + currentPlayerNum + " is " + currentPlayer.getPosition());
+            logMessage("Player " + nextPlayerNumStr + " will play next turn");
         }
-    }
-
-    private Turn takeTurn(int playerCurrentPosition, int newHopCount, String currentPlayerNum) {
-        Turn turn = Turn.advanceBy(playerCurrentPosition, newHopCount);
-
-        if (hopsNotPossible(turn.nextPosition())) {
-            logMessage("Player " + currentPlayerNum + " needs to score exactly " + (100 - playerCurrentPosition) + " on dice roll to win. Passing chance.");
-            return Turn.skipTurn(playerCurrentPosition);
-        }
-
-        if (reachedWinningPosition(turn.nextPosition())) {
-            logMessage("Player " + currentPlayerNum + " wins! Game finished.");
-            endGame();
-        }
-
-        if (yetToStart(playerCurrentPosition) && hasntRolledASix(newHopCount)) {
-            logMessage("Player " + currentPlayerNum + " did not score 6. First a 6 needs to be scored to start moving on board.");
-            return Turn.skipTurn(playerCurrentPosition);
-        }
-
-        return gameBoard.evaluateTurn(turn);
-    }
-
-    private void passTurnToNextPlayer(int playerCurrentPosition, String currentPlayerNum, int nextPlayerNum, String nextPlayerNumStr) {
-        logMessage("Next position for player " + currentPlayerNum + " is " + playerCurrentPosition);
-        logMessage("Player " + nextPlayerNumStr + " will play next turn");
     }
 
     private void endGame() {
@@ -114,22 +88,6 @@ public class SnakesAndLaddersGame {
 
     private void logMessage(String message) {
         msgLogger.log(message);
-    }
-
-    private boolean hasntRolledASix(int newHopCount) {
-        return newHopCount != 6;
-    }
-
-    private boolean yetToStart(int playerOnePosition) {
-        return playerOnePosition == 0;
-    }
-
-    private boolean reachedWinningPosition(int newPosition) {
-        return newPosition == 100;
-    }
-
-    private boolean hopsNotPossible(int newPosition) {
-        return newPosition > 100;
     }
 
     //throw number at random

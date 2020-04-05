@@ -74,4 +74,5 @@ class GameBoardTest {
 
         assertEquals(playerTwo, gameBoard.currentPlayer());
     }
+
 }

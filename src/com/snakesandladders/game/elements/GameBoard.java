@@ -1,6 +1,7 @@
 package com.snakesandladders.game.elements;
 
 import com.snakesandladders.game.io.Logger;
+import com.snakesandladders.game.state.GameEventsListener;
 import com.snakesandladders.game.state.Turn;
 
 import java.util.Map;
@@ -35,6 +36,30 @@ public class GameBoard {
         return currentTurn;
     }
 
+    public Player currentPlayer() {
+        return this.playerGroup.currentPlayer();
+    }
+
+    public void moveToNextPlayer() {
+        this.playerGroup.moveToNextPlayer();
+    }
+
+    public boolean hopsNotPossible(int newPosition) {
+        return newPosition > 100;
+    }
+
+    public boolean reachedWinningPosition(int newPosition) {
+        return newPosition == 100;
+    }
+
+    public boolean yetToStart(int playerOnePosition) {
+        return playerOnePosition == 0;
+    }
+
+    public boolean hasntRolledASix(int newHopCount) {
+        return newHopCount != 6;
+    }
+
     private boolean bittenBySnake(int newPosition) {
         return snakesBoardPositions.get(newPosition) != null;
     }
@@ -43,11 +68,24 @@ public class GameBoard {
         return ladderBoardPositions.get(newPosition) != null;
     }
 
-    public Player currentPlayer() {
-        return this.playerGroup.currentPlayer();
-    }
+    public Turn takeTurn(int playerCurrentPosition, int newHopCount, String currentPlayerNum, GameEventsListener gameEventsListener) {
+        Turn turn = Turn.advanceBy(playerCurrentPosition, newHopCount);
 
-    public void moveToNextPlayer() {
-        this.playerGroup.moveToNextPlayer();
+        if (hopsNotPossible(turn.nextPosition())) {
+            messageLogger.log("Player " + currentPlayerNum + " needs to score exactly " + (100 - playerCurrentPosition) + " on dice roll to win. Passing chance.");
+            return Turn.skipTurn(playerCurrentPosition);
+        }
+
+        if (reachedWinningPosition(turn.nextPosition())) {
+            messageLogger.log("Player " + currentPlayerNum + " wins! Game finished.");
+            gameEventsListener.gameFinished();
+        }
+
+        if (yetToStart(playerCurrentPosition) && hasntRolledASix(newHopCount)) {
+            messageLogger.log("Player " + currentPlayerNum + " did not score 6. First a 6 needs to be scored to start moving on board.");
+            return Turn.skipTurn(playerCurrentPosition);
+        }
+
+        return evaluateTurn(turn);
     }
 }
