@@ -5,7 +5,6 @@ import com.snakesandladders.game.elements.Player;
 import com.snakesandladders.game.elements.PlayerGroup;
 import com.snakesandladders.game.elements.ProgrammableDice;
 import com.snakesandladders.game.io.Logger;
-import com.snakesandladders.game.state.BoardGameEvents;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -59,16 +58,10 @@ public class SnakesAndLaddersGameTest {
         playerTwo = new Player(2, "two", dice, msgLogger);
         playerThree = new Player(3, "three", dice, msgLogger);
         playerFour = new Player(4, "four", dice, msgLogger);
-        BoardGameController controller = new BoardGameController();
         PlayerGroup playerGroup = new PlayerGroup(playerOne, playerTwo, playerThree, playerFour);
-        snakesAndLaddersGame = new SnakesAndLaddersGame(new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger), controller);
+        snakesAndLaddersGame = new SnakesAndLaddersGame(new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger));
 
-        try {
-            //when
-            snakesAndLaddersGame.beginGamePlay();
-        } catch (RuntimeException rte) {
-            assertEquals("Game finished!", rte.getMessage());
-        }
+        snakesAndLaddersGame.beginGamePlay();
 
         //then
         assertEquals("Player 2 got dice roll of 6", msgLogger.getMessageAtPosition(4));
@@ -94,14 +87,6 @@ public class SnakesAndLaddersGameTest {
 
         public String getMessageAtPosition(Integer index) {
             return messageHistory.get(index);
-        }
-    }
-
-    class BoardGameController implements BoardGameEvents {
-
-        @Override
-        public void finished() {
-            throw new RuntimeException("Game finished!");
         }
     }
 

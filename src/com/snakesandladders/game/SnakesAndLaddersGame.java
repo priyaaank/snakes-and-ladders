@@ -2,20 +2,19 @@ package com.snakesandladders.game;
 
 import com.snakesandladders.game.elements.*;
 import com.snakesandladders.game.io.ConsoleLogger;
-import com.snakesandladders.game.state.BoardGameController;
-import com.snakesandladders.game.state.BoardGameEvents;
+import com.snakesandladders.game.state.GameEventsListener;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SnakesAndLaddersGame {
+public class SnakesAndLaddersGame implements GameEventsListener {
 
     private GameBoard gameBoard;
-    private BoardGameEvents controller;
+    private Boolean isGameInProgress;
 
-    public SnakesAndLaddersGame(GameBoard gameBoard, BoardGameEvents controller) {
+    public SnakesAndLaddersGame(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
-        this.controller = controller;
+        this.isGameInProgress = Boolean.TRUE;
     }
 
     public static void main(String[] args) {
@@ -58,21 +57,19 @@ public class SnakesAndLaddersGame {
         );
 
         new SnakesAndLaddersGame(
-                new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger),
-                new BoardGameController()
+                new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger)
         ).beginGamePlay();
     }
 
     public void beginGamePlay() {
-        //continue to play the game until it is over
-        while (true) {
-            gameBoard.takeTurn(SnakesAndLaddersGame.this::endGame);
+        while (this.isGameInProgress) {
+            gameBoard.takeTurn(this);
             gameBoard.moveToNextPlayer();
         }
     }
 
-    private void endGame() {
-        this.controller.finished();
+    @Override
+    public void gameFinished() {
+        this.isGameInProgress = Boolean.FALSE;
     }
-
 }
