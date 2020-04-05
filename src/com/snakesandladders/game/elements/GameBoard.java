@@ -68,22 +68,22 @@ public class GameBoard {
         return ladderBoardPositions.get(newPosition) != null;
     }
 
-    public Turn takeTurn(int playerCurrentPosition, int newHopCount, String currentPlayerNum, GameEventsListener gameEventsListener) {
-        Turn turn = Turn.advanceBy(playerCurrentPosition, newHopCount);
+    public Turn takeTurn(Player player, int newHopCount, GameEventsListener gameEventsListener) {
+        Turn turn = Turn.advanceBy(player.getPosition(), newHopCount);
 
         if (hopsNotPossible(turn.nextPosition())) {
-            messageLogger.log("Player " + currentPlayerNum + " needs to score exactly " + (100 - playerCurrentPosition) + " on dice roll to win. Passing chance.");
-            return Turn.skipTurn(playerCurrentPosition);
+            messageLogger.log("Player " + player.getName() + " needs to score exactly " + (100 - player.getPosition()) + " on dice roll to win. Passing chance.");
+            return Turn.skipTurn(player.getPosition());
         }
 
         if (reachedWinningPosition(turn.nextPosition())) {
-            messageLogger.log("Player " + currentPlayerNum + " wins! Game finished.");
+            messageLogger.log("Player " + player.getName() + " wins! Game finished.");
             gameEventsListener.gameFinished();
         }
 
-        if (yetToStart(playerCurrentPosition) && hasntRolledASix(newHopCount)) {
-            messageLogger.log("Player " + currentPlayerNum + " did not score 6. First a 6 needs to be scored to start moving on board.");
-            return Turn.skipTurn(playerCurrentPosition);
+        if (yetToStart(player.getPosition()) && hasntRolledASix(newHopCount)) {
+            messageLogger.log("Player " + player.getName() + " did not score 6. First a 6 needs to be scored to start moving on board.");
+            return Turn.skipTurn(player.getPosition());
         }
 
         return evaluateTurn(turn);
@@ -91,7 +91,7 @@ public class GameBoard {
 
     public void updatePlayerPosition(int newHopCount, GameEventsListener gameEventsListener) {
         Player currentPlayer = currentPlayer();
-        Integer nextPosition = takeTurn(currentPlayer.getPosition(), newHopCount, currentPlayer.getName(), gameEventsListener).nextPosition();
+        Integer nextPosition = takeTurn(currentPlayer, newHopCount, gameEventsListener).nextPosition();
         currentPlayer.setPosition(nextPosition);
     }
 }
