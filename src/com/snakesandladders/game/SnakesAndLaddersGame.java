@@ -2,7 +2,6 @@ package com.snakesandladders.game;
 
 import com.snakesandladders.game.elements.*;
 import com.snakesandladders.game.io.ConsoleLogger;
-import com.snakesandladders.game.io.Logger;
 import com.snakesandladders.game.state.BoardGameController;
 import com.snakesandladders.game.state.BoardGameEvents;
 
@@ -11,12 +10,10 @@ import java.util.Map;
 
 public class SnakesAndLaddersGame {
 
-    private Logger msgLogger;
     private GameBoard gameBoard;
     private BoardGameEvents controller;
 
-    public SnakesAndLaddersGame(Logger msgLogger, GameBoard gameBoard, BoardGameEvents controller) {
-        this.msgLogger = msgLogger;
+    public SnakesAndLaddersGame(GameBoard gameBoard, BoardGameEvents controller) {
         this.gameBoard = gameBoard;
         this.controller = controller;
     }
@@ -49,40 +46,33 @@ public class SnakesAndLaddersGame {
                 put(63, 88);
             }
         };
+
         ConsoleLogger msgLogger = new ConsoleLogger();
         RollBehavior dice = new RandomDice();
+
         PlayerGroup playerGroup = new PlayerGroup(
                 new Player(1, "one", dice, msgLogger),
                 new Player(2, "two", dice, msgLogger),
                 new Player(3, "three", dice, msgLogger),
                 new Player(4, "four", dice, msgLogger)
         );
-        new SnakesAndLaddersGame(msgLogger, new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger), new BoardGameController()).beginGamePlay();
+
+        new SnakesAndLaddersGame(
+                new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger),
+                new BoardGameController()
+        ).beginGamePlay();
     }
 
     public void beginGamePlay() {
-        Player currentPlayer, nextPlayer = null;
-
         //continue to play the game until it is over
         while (true) {
-            currentPlayer = gameBoard.currentPlayer();
-            String currentPlayerNum = currentPlayer.getName();
             gameBoard.takeTurn(SnakesAndLaddersGame.this::endGame);
-
             gameBoard.moveToNextPlayer();
-            nextPlayer = gameBoard.currentPlayer();
-            String nextPlayerNumStr = nextPlayer.getName();
-            logMessage("Next position for player " + currentPlayerNum + " is " + currentPlayer.getPosition());
-            logMessage("Player " + nextPlayerNumStr + " will play next turn");
         }
     }
 
     private void endGame() {
         this.controller.finished();
-    }
-
-    private void logMessage(String message) {
-        msgLogger.log(message);
     }
 
 }

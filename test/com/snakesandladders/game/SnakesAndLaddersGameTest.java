@@ -61,7 +61,7 @@ public class SnakesAndLaddersGameTest {
         playerFour = new Player(4, "four", dice, msgLogger);
         BoardGameController controller = new BoardGameController();
         PlayerGroup playerGroup = new PlayerGroup(playerOne, playerTwo, playerThree, playerFour);
-        snakesAndLaddersGame = new SnakesAndLaddersGame(msgLogger, new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger), controller);
+        snakesAndLaddersGame = new SnakesAndLaddersGame(new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger), controller);
 
         try {
             //when

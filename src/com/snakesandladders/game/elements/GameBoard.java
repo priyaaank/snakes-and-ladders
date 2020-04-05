@@ -41,7 +41,9 @@ public class GameBoard {
     }
 
     public void moveToNextPlayer() {
+        messageLogger.log("Next position for player " + currentPlayer().getNumber() + " is " + currentPlayer().getPosition());
         this.playerGroup.moveToNextPlayer();
+        messageLogger.log("Player " + currentPlayer().getName() + " will play next turn");
     }
 
     public boolean hopsNotPossible(int newPosition) {
