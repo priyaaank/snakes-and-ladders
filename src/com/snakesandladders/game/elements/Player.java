@@ -1,5 +1,6 @@
 package com.snakesandladders.game.elements;
 
+import com.snakesandladders.game.io.Logger;
 import com.snakesandladders.game.state.Turn;
 
 public class Player {
@@ -7,12 +8,14 @@ public class Player {
     private int number;
     private String name;
     private RollBehavior dice;
+    private Logger messageLogger;
     private Integer position;
 
-    public Player(int number, String name, RollBehavior dice) {
+    public Player(int number, String name, RollBehavior dice, Logger messageLogger) {
         this.number = number;
         this.name = name;
         this.dice = dice;
+        this.messageLogger = messageLogger;
         this.position = 0;
     }
 
@@ -33,6 +36,8 @@ public class Player {
     }
 
     public Turn takeTurn() {
-        return Turn.advanceBy(position, dice.roll());
+        Integer newHopCount = dice.roll();
+        messageLogger.log("Player " + number + " got dice roll of " + newHopCount);
+        return Turn.advanceBy(position, newHopCount);
     }
 }

@@ -50,20 +50,18 @@ public class SnakesAndLaddersGameTest {
         }
     };
 
-
-
     @Test
     void shouldFinishOneRoundOfGamePlaySuccessfully() {
         //given
-        ProgrammableDice dice = new ProgrammableDice(1, 6, 5, 4, 6, 1, 2, 4, 6, 1, 2, 6, 3, 3, 2, 4, 3, 2, 6, 4, 6, 5, 3, 4, 4, 6, 4, 2, 5, 6, 6, 2, 6, 5, 4, 1, 3, 6, 6, 1, 3, 5, 1, 2, 6, 4, 3, 1, 2, 1, 4, 2, 5);
-        playerOne = new Player(1, "one", dice);
-        playerTwo = new Player(2, "two", dice);
-        playerThree = new Player(3, "three", dice);
-        playerFour = new Player(4, "four", dice);
         InMemoryLogger msgLogger = new InMemoryLogger();
+        ProgrammableDice dice = new ProgrammableDice(1, 6, 5, 4, 6, 1, 2, 4, 6, 1, 2, 6, 3, 3, 2, 4, 3, 2, 6, 4, 6, 5, 3, 4, 4, 6, 4, 2, 5, 6, 6, 2, 6, 5, 4, 1, 3, 6, 6, 1, 3, 5, 1, 2, 6, 4, 3, 1, 2, 1, 4, 2, 5);
+        playerOne = new Player(1, "one", dice, msgLogger);
+        playerTwo = new Player(2, "two", dice, msgLogger);
+        playerThree = new Player(3, "three", dice, msgLogger);
+        playerFour = new Player(4, "four", dice, msgLogger);
         BoardGameController controller = new BoardGameController();
         PlayerGroup playerGroup = new PlayerGroup(playerOne, playerTwo, playerThree, playerFour);
-        snakesAndLaddersGame = new SnakesAndLaddersGame(dice, msgLogger, new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger), controller);
+        snakesAndLaddersGame = new SnakesAndLaddersGame(msgLogger, new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger), controller);
 
         try {
             //when

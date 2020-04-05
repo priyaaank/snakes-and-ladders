@@ -1,6 +1,7 @@
 package com.snakesandladders.game.elements;
 
 import com.snakesandladders.game.io.ConsoleLogger;
+import com.snakesandladders.game.io.Logger;
 import com.snakesandladders.game.state.Turn;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,8 +14,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class GameBoardTest {
 
     private GameBoard gameBoard;
-    private Player playerOne = new Player(1, "one", new RandomDice());
-    private Player playerTwo = new Player(2, "two", new RandomDice());
+    private Logger logger = new ConsoleLogger();
+    private Player playerOne = new Player(1, "one", new RandomDice(), logger);
+    private Player playerTwo = new Player(2, "two", new RandomDice(), logger);
 
     private Map<Integer, Integer> snakesBoardPositions = new HashMap<Integer, Integer>() {
         {

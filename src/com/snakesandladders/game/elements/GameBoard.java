@@ -56,10 +56,6 @@ public class GameBoard {
         return playerOnePosition == 0;
     }
 
-    public boolean hasntRolledASix(int newHopCount) {
-        return newHopCount != 6;
-    }
-
     private boolean bittenBySnake(int newPosition) {
         return snakesBoardPositions.get(newPosition) != null;
     }
@@ -68,8 +64,8 @@ public class GameBoard {
         return ladderBoardPositions.get(newPosition) != null;
     }
 
-    public Turn takeTurn(Player player, int newHopCount, GameEventsListener gameEventsListener) {
-        Turn turn = Turn.advanceBy(player.getPosition(), newHopCount);
+    private Turn takeTurn(Player player, GameEventsListener gameEventsListener) {
+        Turn turn = player.takeTurn();
 
         if (hopsNotPossible(turn.nextPosition())) {
             messageLogger.log("Player " + player.getName() + " needs to score exactly " + (100 - player.getPosition()) + " on dice roll to win. Passing chance.");
@@ -81,7 +77,7 @@ public class GameBoard {
             gameEventsListener.gameFinished();
         }
 
-        if (yetToStart(player.getPosition()) && hasntRolledASix(newHopCount)) {
+        if (yetToStart(player.getPosition()) && !turn.hasRolledASix()) {
             messageLogger.log("Player " + player.getName() + " did not score 6. First a 6 needs to be scored to start moving on board.");
             return Turn.skipTurn(player.getPosition());
         }
@@ -89,9 +85,8 @@ public class GameBoard {
         return evaluateTurn(turn);
     }
 
-    public void updatePlayerPosition(int newHopCount, GameEventsListener gameEventsListener) {
-        Player currentPlayer = currentPlayer();
-        Integer nextPosition = takeTurn(currentPlayer, newHopCount, gameEventsListener).nextPosition();
-        currentPlayer.setPosition(nextPosition);
+    public void updatePlayerPosition(GameEventsListener gameEventsListener) {
+        Integer nextPosition = takeTurn(currentPlayer(), gameEventsListener).nextPosition();
+        currentPlayer().setPosition(nextPosition);
     }
 }

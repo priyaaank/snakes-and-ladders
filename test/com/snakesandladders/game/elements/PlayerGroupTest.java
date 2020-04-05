@@ -1,6 +1,8 @@
 package com.snakesandladders.game.elements;
 
 import com.snakesandladders.game.errors.GameException;
+import com.snakesandladders.game.io.ConsoleLogger;
+import com.snakesandladders.game.io.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,11 +14,13 @@ class PlayerGroupTest {
     private PlayerGroup playerGroup;
     private Player playerTwo;
     private Player playerOne;
+    private Logger logger;
 
     @BeforeEach
     void setUp() {
-        playerOne = new Player(1, "one", new RandomDice());
-        playerTwo = new Player(2, "two", new RandomDice());
+        logger = new ConsoleLogger();
+        playerOne = new Player(1, "one", new RandomDice(), logger);
+        playerTwo = new Player(2, "two", new RandomDice(), logger);
         playerGroup = new PlayerGroup(playerOne, playerTwo);
     }
 

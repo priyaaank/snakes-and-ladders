@@ -11,13 +11,11 @@ import java.util.Map;
 
 public class SnakesAndLaddersGame {
 
-    private RollBehavior dice;
     private Logger msgLogger;
     private GameBoard gameBoard;
     private BoardGameEvents controller;
 
-    public SnakesAndLaddersGame(RollBehavior dice, Logger msgLogger, GameBoard gameBoard, BoardGameEvents controller) {
-        this.dice = dice;
+    public SnakesAndLaddersGame(Logger msgLogger, GameBoard gameBoard, BoardGameEvents controller) {
         this.msgLogger = msgLogger;
         this.gameBoard = gameBoard;
         this.controller = controller;
@@ -54,12 +52,12 @@ public class SnakesAndLaddersGame {
         ConsoleLogger msgLogger = new ConsoleLogger();
         RollBehavior dice = new RandomDice();
         PlayerGroup playerGroup = new PlayerGroup(
-                new Player(1, "one", dice),
-                new Player(2, "two", dice),
-                new Player(3, "three", dice),
-                new Player(4, "four", dice)
+                new Player(1, "one", dice, msgLogger),
+                new Player(2, "two", dice, msgLogger),
+                new Player(3, "three", dice, msgLogger),
+                new Player(4, "four", dice, msgLogger)
         );
-        new SnakesAndLaddersGame(dice, msgLogger, new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger), new BoardGameController()).beginGamePlay();
+        new SnakesAndLaddersGame(msgLogger, new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger), new BoardGameController()).beginGamePlay();
     }
 
     public void beginGamePlay() {
@@ -68,10 +66,8 @@ public class SnakesAndLaddersGame {
         //continue to play the game until it is over
         while (true) {
             currentPlayer = gameBoard.currentPlayer();
-            int newHopCount = rollDice();
-            logMessage("Player " + currentPlayer.getNumber() + " got dice roll of " + newHopCount);
             String currentPlayerNum = currentPlayer.getName();
-            gameBoard.updatePlayerPosition(newHopCount, SnakesAndLaddersGame.this::endGame);
+            gameBoard.updatePlayerPosition(SnakesAndLaddersGame.this::endGame);
 
             gameBoard.moveToNextPlayer();
             nextPlayer = gameBoard.currentPlayer();
@@ -87,11 +83,6 @@ public class SnakesAndLaddersGame {
 
     private void logMessage(String message) {
         msgLogger.log(message);
-    }
-
-    //throw number at random
-    private Integer rollDice() {
-        return this.dice.roll();
     }
 
 }
