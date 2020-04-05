@@ -1,7 +1,7 @@
 package com.snakesandladders.game.elements;
 
-import com.snakesandladders.game.io.ConsoleLogger;
-import com.snakesandladders.game.io.Logger;
+import com.snakesandladders.game.io.InMemoryLogger;
+import com.snakesandladders.game.rules.RuleEvaluator;
 import com.snakesandladders.game.state.Turn;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class GameBoardTest {
 
     private GameBoard gameBoard;
-    private Logger logger = new ConsoleLogger();
+    private InMemoryLogger logger = new InMemoryLogger();
     private Player playerOne = new Player(1, "one", new RandomDice(), logger);
     private Player playerTwo = new Player(2, "two", new RandomDice(), logger);
 
@@ -48,7 +48,7 @@ class GameBoardTest {
     @BeforeEach
     void setUp() {
         gameBoard = new GameBoard(snakesBoardPositions, ladderBoardPositions,
-                new PlayerGroup(playerOne, playerTwo), new ConsoleLogger());
+                new PlayerGroup(playerOne, playerTwo), logger, new RuleEvaluator(snakesBoardPositions, ladderBoardPositions, logger));
     }
 
     @Test
@@ -77,4 +77,39 @@ class GameBoardTest {
         assertEquals(playerTwo, gameBoard.currentPlayer());
     }
 
+    @Test
+    void shouldLogASkipTurnMessageForAPlayer() {
+        playerOne.updatePosition(Turn.advanceTo(3));
+
+        gameBoard.skipTurnFor(playerOne);
+
+        assertEquals("Player one needs to score exactly 97 on dice roll to win. Passing chance.", logger.getMessageAtPosition(0));
+    }
+
+    @Test
+    void shouldUpdatePlayerPositionWithTurn() {
+        playerOne.updatePosition(Turn.advanceTo(3));
+
+        gameBoard.updatedTurnFor(playerOne, Turn.advanceBy(3, 4));
+
+        assertEquals(7, playerOne.getPosition());
+    }
+
+    @Test
+    void shouldLogMessageWhenPlayerWins() {
+        playerOne.updatePosition(Turn.advanceTo(100));
+
+        gameBoard.playerWon(playerOne);
+
+        assertEquals("Player one wins! Game finished.", logger.getMessageAtPosition(0));
+    }
+
+    @Test
+    void shouldLogMessageForYetToStartPlayer() {
+        playerOne.updatePosition(Turn.advanceTo(0));
+
+        gameBoard.yetToStart(playerOne);
+
+        assertEquals("Player one did not score 6. First a 6 needs to be scored to start moving on board.", logger.getMessageAtPosition(0));
+    }
 }

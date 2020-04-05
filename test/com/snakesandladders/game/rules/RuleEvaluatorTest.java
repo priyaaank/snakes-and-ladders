@@ -33,7 +33,7 @@ class RuleEvaluatorTest {
             }
         };
 
-        ruleEvaluator = new RuleEvaluator(snakePositions, ladderPositions);
+        ruleEvaluator = new RuleEvaluator(snakePositions, ladderPositions, new ConsoleLogger());
     }
 
     @Test

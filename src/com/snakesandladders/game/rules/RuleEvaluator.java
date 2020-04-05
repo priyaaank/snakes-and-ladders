@@ -1,6 +1,7 @@
 package com.snakesandladders.game.rules;
 
 import com.snakesandladders.game.elements.Player;
+import com.snakesandladders.game.io.Logger;
 import com.snakesandladders.game.state.Turn;
 
 import java.util.Arrays;
@@ -14,13 +15,13 @@ public class RuleEvaluator {
 
     private List<GameRule> rules;
 
-    public RuleEvaluator(Map<Integer, Integer> snakePositions, Map<Integer, Integer> ladderPositions) {
+    public RuleEvaluator(Map<Integer, Integer> snakePositions, Map<Integer, Integer> ladderPositions, Logger logger) {
         this.rules = Arrays.asList(
                 new MovesNotPossible(),
                 new YetToStart(),
                 new PlayerWins(),
-                new SnakeBite(snakePositions),
-                new LadderClimb(ladderPositions),
+                new SnakeBite(snakePositions, logger),
+                new LadderClimb(ladderPositions, logger),
                 new SimpleMove()
         );
     }
@@ -29,11 +30,12 @@ public class RuleEvaluator {
         EvaluationInterrupter evaluationInterrupter = new EvaluationInterrupter(FALSE);
         this.rules.forEach(rule -> {
             if (!evaluationInterrupter.terminateEvaluation)
-                rule.evaluate(player, turn, evaluationTerminationListener(listener, evaluationInterrupter));
+                rule.evaluate(player, turn, callbackDelegator(listener, evaluationInterrupter));
         });
     }
 
-    private RuleEvaluationListener evaluationTerminationListener(RuleEvaluationListener listener, EvaluationInterrupter evaluationInterrupter) {
+    private RuleEvaluationListener callbackDelegator(RuleEvaluationListener listener,
+                                                     EvaluationInterrupter evaluationInterrupter) {
         return new RuleEvaluationListener() {
             @Override
             public void skipTurnFor(Player player) {

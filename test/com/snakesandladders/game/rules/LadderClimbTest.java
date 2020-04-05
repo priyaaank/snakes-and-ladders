@@ -24,7 +24,7 @@ class LadderClimbTest {
             {
                 put(12, 2);
             }
-        });
+        }, new ConsoleLogger());
         this.playerOne = new Player(1, "one", new RandomDice(), new ConsoleLogger());
     }
 

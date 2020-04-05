@@ -1,24 +1,28 @@
 package com.snakesandladders.game.elements;
 
 import com.snakesandladders.game.io.Logger;
+import com.snakesandladders.game.rules.RuleEvaluationListener;
+import com.snakesandladders.game.rules.RuleEvaluator;
 import com.snakesandladders.game.state.GameEventsListener;
 import com.snakesandladders.game.state.Turn;
 
 import java.util.Map;
 
-public class GameBoard {
+public class GameBoard implements RuleEvaluationListener  {
 
     private final Map<Integer, Integer> snakesBoardPositions;
     private final Map<Integer, Integer> ladderBoardPositions;
     private PlayerGroup playerGroup;
     private final Logger messageLogger;
+    private RuleEvaluator ruleEvaluator;
 
     public GameBoard(Map<Integer, Integer> snakesBoardPositions, Map<Integer, Integer> ladderBoardPositions,
-                     PlayerGroup playerGroup, Logger messageLogger) {
+                     PlayerGroup playerGroup, Logger messageLogger, RuleEvaluator ruleEvaluator) {
         this.snakesBoardPositions = snakesBoardPositions;
         this.ladderBoardPositions = ladderBoardPositions;
         this.playerGroup = playerGroup;
         this.messageLogger = messageLogger;
+        this.ruleEvaluator = ruleEvaluator;
     }
 
     public Turn evaluateTurn(Turn currentTurn) {
@@ -83,5 +87,26 @@ public class GameBoard {
         }
 
         currentPlayer().updatePosition(turn);
+    }
+
+    @Override
+    public void skipTurnFor(Player player) {
+        player.updatePosition(Turn.skipTurn(player.getPosition()));
+        messageLogger.log("Player " + player.getName() + " needs to score exactly " + (100 - player.getPosition()) + " on dice roll to win. Passing chance.");
+    }
+
+    @Override
+    public void yetToStart(Player player) {
+        messageLogger.log("Player " + player.getName() + " did not score 6. First a 6 needs to be scored to start moving on board.");
+    }
+
+    @Override
+    public void playerWon(Player player) {
+        messageLogger.log("Player " + player.getName() + " wins! Game finished.");
+    }
+
+    @Override
+    public void updatedTurnFor(Player player, Turn turn) {
+        player.updatePosition(turn);
     }
 }

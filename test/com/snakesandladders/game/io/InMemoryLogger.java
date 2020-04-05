@@ -1,4 +1,4 @@
-package com.snakesandladders.game;
+package com.snakesandladders.game.io;
 
 import com.snakesandladders.game.io.Logger;
 

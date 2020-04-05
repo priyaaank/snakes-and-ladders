@@ -4,12 +4,11 @@ import com.snakesandladders.game.elements.GameBoard;
 import com.snakesandladders.game.elements.Player;
 import com.snakesandladders.game.elements.PlayerGroup;
 import com.snakesandladders.game.elements.ProgrammableDice;
-import com.snakesandladders.game.io.Logger;
+import com.snakesandladders.game.io.InMemoryLogger;
+import com.snakesandladders.game.rules.RuleEvaluator;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -59,7 +58,7 @@ public class SnakesAndLaddersGameTest {
         playerThree = new Player(3, "three", dice, msgLogger);
         playerFour = new Player(4, "four", dice, msgLogger);
         PlayerGroup playerGroup = new PlayerGroup(playerOne, playerTwo, playerThree, playerFour);
-        snakesAndLaddersGame = new SnakesAndLaddersGame(new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger));
+        snakesAndLaddersGame = new SnakesAndLaddersGame(new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger, new RuleEvaluator(snakesBoardPositions, ladderBoardPositions, msgLogger)));
 
         snakesAndLaddersGame.beginGamePlay();
 
@@ -69,25 +68,6 @@ public class SnakesAndLaddersGameTest {
         assertEquals("Player 4 got dice roll of 6", msgLogger.getMessageAtPosition(40));
         assertEquals("Player 3 got dice roll of 6", msgLogger.getMessageAtPosition(63));
         assertEquals("Player one wins! Game finished.", msgLogger.getMessageAtPosition(172));
-    }
-
-    class InMemoryLogger implements Logger {
-
-        private List<String> messageHistory;
-
-        public InMemoryLogger() {
-            this.messageHistory = new ArrayList<>();
-        }
-
-        @Override
-        public void log(String message) {
-            System.out.println("Storing message " + message);
-            this.messageHistory.add(message);
-        }
-
-        public String getMessageAtPosition(Integer index) {
-            return messageHistory.get(index);
-        }
     }
 
 }

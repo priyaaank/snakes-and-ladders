@@ -2,6 +2,7 @@ package com.snakesandladders.game;
 
 import com.snakesandladders.game.elements.*;
 import com.snakesandladders.game.io.ConsoleLogger;
+import com.snakesandladders.game.rules.RuleEvaluator;
 import com.snakesandladders.game.state.GameEventsListener;
 
 import java.util.HashMap;
@@ -57,7 +58,7 @@ public class SnakesAndLaddersGame implements GameEventsListener {
         );
 
         new SnakesAndLaddersGame(
-                new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger)
+                new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger, new RuleEvaluator(snakesBoardPositions, ladderBoardPositions, msgLogger))
         ).beginGamePlay();
     }
 
