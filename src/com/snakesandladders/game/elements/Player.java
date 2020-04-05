@@ -31,10 +31,6 @@ public class Player {
         return this.position;
     }
 
-    public void setPosition(Integer position) {
-        this.position = position;
-    }
-
     public Turn takeTurn() {
         Integer newHopCount = dice.roll();
         messageLogger.log("Player " + number + " got dice roll of " + newHopCount);

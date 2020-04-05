@@ -33,21 +33,9 @@ class PlayerTest {
     }
 
     @Test
-    void shouldBeAbleToStorePosition() {
-        //given
-        Player playerOne = new Player(1, "one", new RandomDice(), logger);
-
-        //when
-        playerOne.setPosition(28);
-
-        //then
-        assertEquals(28, playerOne.getPosition());
-    }
-
-    @Test
     void shouldBeAbleToRollDice() {
         Player playerOne = new Player(1, "one", new ProgrammableDice(2), logger);
-        playerOne.setPosition(12);
+        playerOne.updatePosition(Turn.advanceTo(12));
 
         Turn newTurn = playerOne.takeTurn();
 
