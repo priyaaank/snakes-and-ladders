@@ -43,22 +43,15 @@ class MovesNotPossibleTest {
         assertTrue(call.hopsSkipped);
     }
 
-    @Test
-    void shouldSkipTurnIfPlayerHasNotStartedMovingAndHasNotScoredASix() {
-        ShouldSkipMovement call = new ShouldSkipMovement(FALSE);
-        playerOne.updatePosition(Turn.advanceTo(0));
-
-        hopsNotPossibleRule.evaluate(playerOne, Turn.advanceBy(0, 4), turnSkipUpdater(call));
-
-        assertTrue(call.hopsSkipped);
-    }
-
     private RuleEvaluationListener turnSkipUpdater(ShouldSkipMovement call) {
         return new RuleEvaluationListener() {
             @Override
             public void skipTurnFor(Player player) {
                 call.hopsSkipped = TRUE;
             }
+
+            @Override
+            public void yetToStart(Player player) { /* Do nothing */ }
 
             @Override
             public void playerWon(Player player) { /* Do nothing */ }

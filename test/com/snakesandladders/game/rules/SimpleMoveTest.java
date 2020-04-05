@@ -46,6 +46,9 @@ class SimpleMoveTest {
             public void skipTurnFor(Player player) { /* Do Nothing */ }
 
             @Override
+            public void yetToStart(Player player) { /* Do nothing */ }
+
+            @Override
             public void playerWon(Player player) { /* Do Nothing */ }
 
             @Override

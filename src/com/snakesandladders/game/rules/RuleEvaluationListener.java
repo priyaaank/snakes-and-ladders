@@ -7,6 +7,8 @@ public interface RuleEvaluationListener {
 
     void skipTurnFor(Player player);
 
+    void yetToStart(Player player);
+
     void playerWon(Player player);
 
     void updatedTurnFor(Player player, Turn turn);

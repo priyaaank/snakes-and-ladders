@@ -70,10 +70,20 @@ class RuleEvaluatorTest {
     void shouldEvaluateRuleForSkippingTurn() {
         RuleEvaluationResult result = new RuleEvaluationResult();
 
+        playerOne.updatePosition(Turn.advanceTo(99));
+        ruleEvaluator.evaluateRules(playerOne, Turn.advanceBy(99, 3), getRuleEvaluationListener(result));
+
+        assertEquals("skipTurn", result.evaluatedRuleName);
+    }
+
+    @Test
+    void shouldEvaluateRuleForYetToStart() {
+        RuleEvaluationResult result = new RuleEvaluationResult();
+
         playerOne.updatePosition(Turn.advanceTo(0));
         ruleEvaluator.evaluateRules(playerOne, Turn.advanceBy(0, 3), getRuleEvaluationListener(result));
 
-        assertEquals("skipTurn", result.evaluatedRuleName);
+        assertEquals("yetToStart", result.evaluatedRuleName);
     }
 
     @Test
@@ -97,6 +107,9 @@ class RuleEvaluatorTest {
             public void skipTurnFor(Player player) {
                 result.evaluatedRuleName = "skipTurn";
             }
+
+            @Override
+            public void yetToStart(Player player) { result.evaluatedRuleName = "yetToStart"; }
 
             @Override
             public void playerWon(Player player) {

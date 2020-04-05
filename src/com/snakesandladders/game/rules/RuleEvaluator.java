@@ -17,6 +17,7 @@ public class RuleEvaluator {
     public RuleEvaluator(Map<Integer, Integer> snakePositions, Map<Integer, Integer> ladderPositions) {
         this.rules = Arrays.asList(
                 new MovesNotPossible(),
+                new YetToStart(),
                 new PlayerWins(),
                 new SnakeBite(snakePositions),
                 new LadderClimb(ladderPositions),
@@ -27,7 +28,7 @@ public class RuleEvaluator {
     public void evaluateRules(Player player, Turn turn, RuleEvaluationListener listener) {
         EvaluationInterrupter evaluationInterrupter = new EvaluationInterrupter(FALSE);
         this.rules.forEach(rule -> {
-            if(!evaluationInterrupter.terminateEvaluation)
+            if (!evaluationInterrupter.terminateEvaluation)
                 rule.evaluate(player, turn, evaluationTerminationListener(listener, evaluationInterrupter));
         });
     }
@@ -38,6 +39,12 @@ public class RuleEvaluator {
             public void skipTurnFor(Player player) {
                 evaluationInterrupter.terminateEvaluation = TRUE;
                 listener.skipTurnFor(player);
+            }
+
+            @Override
+            public void yetToStart(Player player) {
+                evaluationInterrupter.terminateEvaluation = TRUE;
+                listener.yetToStart(player);
             }
 
             @Override

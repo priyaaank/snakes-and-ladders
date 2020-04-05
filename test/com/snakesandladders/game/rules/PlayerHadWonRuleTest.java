@@ -48,6 +48,9 @@ class PlayerHadWonRuleTest {
             }
 
             @Override
+            public void yetToStart(Player player) { /* Do nothing */ }
+
+            @Override
             public void playerWon(Player player) {
                 playerWonCall.playerWon = TRUE;
             }

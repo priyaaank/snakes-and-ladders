@@ -7,7 +7,7 @@ public class MovesNotPossible implements GameRule {
 
     @Override
     public void evaluate(Player player, Turn turn, RuleEvaluationListener listener) {
-        if (turn.nextPosition() > 100 || (player.getPosition() == 0 && !turn.hasRolledASix())) {
+        if (turn.nextPosition() > 100) {
             listener.skipTurnFor(player);
         }
     }

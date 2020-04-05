@@ -54,6 +54,9 @@ class SnakeBiteTest {
             public void skipTurnFor(Player player) { /* Do nothing */ }
 
             @Override
+            public void yetToStart(Player player) { /* Do nothing */ }
+
+            @Override
             public void playerWon(Player player) { /* Do nothing */ }
 
             @Override
