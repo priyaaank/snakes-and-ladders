@@ -1,9 +1,10 @@
 package com.snakesandladders.game;
 
+import com.snakesandladders.game.elements.GameBoard;
 import com.snakesandladders.game.io.ConsoleLogger;
 import com.snakesandladders.game.io.Logger;
-import com.snakesandladders.game.props.RandomDice;
-import com.snakesandladders.game.props.RollBehavior;
+import com.snakesandladders.game.elements.RandomDice;
+import com.snakesandladders.game.elements.RollBehavior;
 import com.snakesandladders.game.state.BoardGameController;
 import com.snakesandladders.game.state.BoardGameEvents;
 import com.snakesandladders.game.state.Turn;
@@ -13,18 +14,21 @@ import java.util.Map;
 
 public class SnakesAndLaddersGame {
 
-    private Map<Integer, Integer> snakesBoardPositions;
-    private Map<Integer, Integer> ladderBoardPositions;
     private int activePlayer = 1;
     private RollBehavior dice;
     private Logger msgLogger;
+    private GameBoard gameBoard;
     private BoardGameEvents controller;
 
-    public SnakesAndLaddersGame(RollBehavior dice, Logger msgLogger, BoardGameEvents controller) {
+    public SnakesAndLaddersGame(RollBehavior dice, Logger msgLogger, GameBoard gameBoard, BoardGameEvents controller) {
         this.dice = dice;
         this.msgLogger = msgLogger;
+        this.gameBoard = gameBoard;
         this.controller = controller;
-        snakesBoardPositions = new HashMap<Integer, Integer>() {
+    }
+
+    public static void main(String[] args) {
+        Map<Integer, Integer> snakesBoardPositions = new HashMap<Integer, Integer>() {
             {
                 put(18, 2);
                 put(25, 8);
@@ -39,7 +43,7 @@ public class SnakesAndLaddersGame {
             }
         };
 
-        ladderBoardPositions = new HashMap<Integer, Integer>() {
+        Map<Integer, Integer> ladderBoardPositions = new HashMap<Integer, Integer>() {
             {
                 put(9, 32);
                 put(12, 53);
@@ -51,10 +55,8 @@ public class SnakesAndLaddersGame {
                 put(63, 88);
             }
         };
-    }
-
-    public static void main(String[] args) {
-        new SnakesAndLaddersGame(new RandomDice(), new ConsoleLogger(), new BoardGameController()).beginGamePlay();
+        ConsoleLogger msgLogger = new ConsoleLogger();
+        new SnakesAndLaddersGame(new RandomDice(), msgLogger, new GameBoard(snakesBoardPositions,  ladderBoardPositions, msgLogger), new BoardGameController()).beginGamePlay();
     }
 
     public void beginGamePlay() {
@@ -113,17 +115,7 @@ public class SnakesAndLaddersGame {
             return Turn.skipTurn(playerCurrentPosition);
         }
 
-        if (bittenBySnake(snakesBoardPositions, turn.nextPosition())) {
-            logMessage("Player got bit by snake a position " + turn.nextPosition());
-            return Turn.advanceTo(snakesBoardPositions.get(turn.nextPosition()));
-        }
-
-        if (chancedUponALadder(ladderBoardPositions, turn.nextPosition())) {
-            logMessage("Player got chanced upon a ladder at position " + turn.nextPosition() + "!");
-            return Turn.advanceTo(ladderBoardPositions.get(turn.nextPosition()));
-        }
-
-        return turn;
+        return gameBoard.evaluateTurn(turn);
     }
 
     private void passTurnToNextPlayer(int playerCurrentPosition, String currentPlayerNum, int nextPlayerNum, String nextPlayerNumStr) {
@@ -138,14 +130,6 @@ public class SnakesAndLaddersGame {
 
     private void logMessage(String message) {
         msgLogger.log(message);
-    }
-
-    private boolean chancedUponALadder(Map<Integer, Integer> ladderBoardPositions, int newPosition) {
-        return ladderBoardPositions.get(newPosition) != null;
-    }
-
-    private boolean bittenBySnake(Map<Integer, Integer> snakesBoardPositions, int newPosition) {
-        return snakesBoardPositions.get(newPosition) != null;
     }
 
     private boolean hasntRolledASix(int newHopCount) {

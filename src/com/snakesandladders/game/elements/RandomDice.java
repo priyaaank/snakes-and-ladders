@@ -1,4 +1,4 @@
-package com.snakesandladders.game.props;
+package com.snakesandladders.game.elements;
 
 import java.util.Random;
 

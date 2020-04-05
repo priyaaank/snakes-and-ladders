@@ -1,4 +1,4 @@
-package com.snakesandladders.game.props;
+package com.snakesandladders.game.elements;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
