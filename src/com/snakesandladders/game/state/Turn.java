@@ -1,5 +1,7 @@
 package com.snakesandladders.game.state;
 
+import static java.lang.Boolean.FALSE;
+
 public class Turn {
 
     private static final int NO_HOPS = 0;
@@ -21,11 +23,18 @@ public class Turn {
     }
 
     public static Turn advanceBy(final Integer currentPosition, final Integer hopCount) {
-        return new Turn(currentPosition, Boolean.FALSE, hopCount);
+        return new Turn(currentPosition, FALSE, hopCount);
     }
 
     public static Turn advanceTo(final Integer newPosition) {
-        return new Turn(newPosition, Boolean.FALSE, NO_HOPS);
+        return new Turn(newPosition, FALSE, NO_HOPS);
     }
 
+    public Boolean hasRolledASix() {
+        return this.hopCount == 6;
+    }
+
+    public boolean hasReachedHundred() {
+        return (this.currentPosition + this.hopCount) == 100;
+    }
 }
