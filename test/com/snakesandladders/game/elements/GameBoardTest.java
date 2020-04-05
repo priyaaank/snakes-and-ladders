@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class GameBoardTest {
 
@@ -111,5 +112,12 @@ class GameBoardTest {
         gameBoard.yetToStart(playerOne);
 
         assertEquals("Player one did not score 6. First a 6 needs to be scored to start moving on board.", logger.getMessageAtPosition(0));
+    }
+
+    @Test
+    void shouldIndicateWhenGameHasFinished() {
+        gameBoard.playerWon(playerOne);
+
+        assertFalse(gameBoard.isGameInProgress());
     }
 }

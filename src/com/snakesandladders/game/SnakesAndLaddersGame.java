@@ -3,12 +3,11 @@ package com.snakesandladders.game;
 import com.snakesandladders.game.elements.*;
 import com.snakesandladders.game.io.ConsoleLogger;
 import com.snakesandladders.game.rules.RuleEvaluator;
-import com.snakesandladders.game.state.GameEventsListener;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SnakesAndLaddersGame implements GameEventsListener {
+public class SnakesAndLaddersGame {
 
     private GameBoard gameBoard;
     private Boolean isGameInProgress;
@@ -63,14 +62,9 @@ public class SnakesAndLaddersGame implements GameEventsListener {
     }
 
     public void beginGamePlay() {
-        while (this.isGameInProgress) {
-            gameBoard.takeTurn(this);
+        while (gameBoard.isGameInProgress()) {
+            gameBoard.takeTurn();
             gameBoard.moveToNextPlayer();
         }
-    }
-
-    @Override
-    public void gameFinished() {
-        this.isGameInProgress = Boolean.FALSE;
     }
 }

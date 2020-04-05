@@ -3,21 +3,22 @@ package com.snakesandladders.game.elements;
 import com.snakesandladders.game.io.Logger;
 import com.snakesandladders.game.rules.RuleEvaluationListener;
 import com.snakesandladders.game.rules.RuleEvaluator;
-import com.snakesandladders.game.state.GameEventsListener;
 import com.snakesandladders.game.state.Turn;
 
 import java.util.Map;
 
-public class GameBoard implements RuleEvaluationListener  {
+public class GameBoard implements RuleEvaluationListener {
 
     private final Map<Integer, Integer> snakesBoardPositions;
     private final Map<Integer, Integer> ladderBoardPositions;
     private PlayerGroup playerGroup;
     private final Logger messageLogger;
     private RuleEvaluator ruleEvaluator;
+    private Boolean isGameInProgress;
 
     public GameBoard(Map<Integer, Integer> snakesBoardPositions, Map<Integer, Integer> ladderBoardPositions,
                      PlayerGroup playerGroup, Logger messageLogger, RuleEvaluator ruleEvaluator) {
+        this.isGameInProgress = Boolean.TRUE;
         this.snakesBoardPositions = snakesBoardPositions;
         this.ladderBoardPositions = ladderBoardPositions;
         this.playerGroup = playerGroup;
@@ -66,7 +67,7 @@ public class GameBoard implements RuleEvaluationListener  {
         return ladderBoardPositions.get(newPosition) != null;
     }
 
-    public void takeTurn(GameEventsListener gameEventsListener) {
+    public void takeTurn() {
         Player currentPlayer = currentPlayer();
         Turn turn = currentPlayer.takeTurn();
 
@@ -76,7 +77,7 @@ public class GameBoard implements RuleEvaluationListener  {
         } else {
             if (turn.hasReachedHundred()) {
                 messageLogger.log("Player " + currentPlayer.getName() + " wins! Game finished.");
-                gameEventsListener.gameFinished();
+                isGameInProgress = Boolean.FALSE;
             }
             if (yetToStart(currentPlayer.getPosition()) && !turn.hasRolledASix()) {
                 messageLogger.log("Player " + currentPlayer.getName() + " did not score 6. First a 6 needs to be scored to start moving on board.");
@@ -103,10 +104,15 @@ public class GameBoard implements RuleEvaluationListener  {
     @Override
     public void playerWon(Player player) {
         messageLogger.log("Player " + player.getName() + " wins! Game finished.");
+        isGameInProgress = Boolean.FALSE;
     }
 
     @Override
     public void updatedTurnFor(Player player, Turn turn) {
         player.updatePosition(turn);
+    }
+
+    public Boolean isGameInProgress() {
+        return isGameInProgress;
     }
 }
