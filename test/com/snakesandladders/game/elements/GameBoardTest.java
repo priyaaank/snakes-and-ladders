@@ -13,6 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class GameBoardTest {
 
     private GameBoard gameBoard;
+    private Player playerOne = new Player(1, "one");
+    private Player playerTwo = new Player(2, "two");
 
     private Map<Integer, Integer> snakesBoardPositions = new HashMap<Integer, Integer>() {
         {
@@ -43,7 +45,8 @@ class GameBoardTest {
 
     @BeforeEach
     void setUp() {
-        gameBoard = new GameBoard(snakesBoardPositions, ladderBoardPositions, new ConsoleLogger());
+        gameBoard = new GameBoard(snakesBoardPositions, ladderBoardPositions,
+                new PlayerGroup(playerOne, playerTwo), new ConsoleLogger());
     }
 
     @Test
@@ -58,5 +61,17 @@ class GameBoardTest {
         Turn updatedTurn = gameBoard.evaluateTurn(Turn.advanceTo(12));
 
         assertEquals(53, updatedTurn.nextPosition());
+    }
+
+    @Test
+    void shouldProvideDetailsOfCurrentPlayer() {
+        assertEquals(playerOne, gameBoard.currentPlayer());
+    }
+
+    @Test
+    void shouldSwitchToNextPlayer() {
+        gameBoard.moveToNextPlayer();
+
+        assertEquals(playerTwo, gameBoard.currentPlayer());
     }
 }

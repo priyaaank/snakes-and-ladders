@@ -56,7 +56,7 @@ public class PlayerGroup {
             }
 
             curr = first;
-            last.nextNode = first;
+            if(last != null) last.nextNode = first;
         }
 
         T nextElement() {

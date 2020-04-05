@@ -9,11 +9,14 @@ public class GameBoard {
 
     private final Map<Integer, Integer> snakesBoardPositions;
     private final Map<Integer, Integer> ladderBoardPositions;
+    private PlayerGroup playerGroup;
     private final Logger messageLogger;
 
-    public GameBoard(Map<Integer, Integer> snakesBoardPositions, Map<Integer, Integer> ladderBoardPositions, Logger messageLogger) {
+    public GameBoard(Map<Integer, Integer> snakesBoardPositions, Map<Integer, Integer> ladderBoardPositions,
+                     PlayerGroup playerGroup, Logger messageLogger) {
         this.snakesBoardPositions = snakesBoardPositions;
         this.ladderBoardPositions = ladderBoardPositions;
+        this.playerGroup = playerGroup;
         this.messageLogger = messageLogger;
     }
 
@@ -40,4 +43,11 @@ public class GameBoard {
         return ladderBoardPositions.get(newPosition) != null;
     }
 
+    public Player currentPlayer() {
+        return this.playerGroup.currentPlayer();
+    }
+
+    public void moveToNextPlayer() {
+        this.playerGroup.moveToNextPlayer();
+    }
 }

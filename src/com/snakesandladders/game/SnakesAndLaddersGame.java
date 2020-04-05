@@ -1,8 +1,6 @@
 package com.snakesandladders.game;
 
-import com.snakesandladders.game.elements.GameBoard;
-import com.snakesandladders.game.elements.RandomDice;
-import com.snakesandladders.game.elements.RollBehavior;
+import com.snakesandladders.game.elements.*;
 import com.snakesandladders.game.io.ConsoleLogger;
 import com.snakesandladders.game.io.Logger;
 import com.snakesandladders.game.state.BoardGameController;
@@ -14,7 +12,6 @@ import java.util.Map;
 
 public class SnakesAndLaddersGame {
 
-    private int activePlayer = 1;
     private RollBehavior dice;
     private Logger msgLogger;
     private GameBoard gameBoard;
@@ -56,44 +53,32 @@ public class SnakesAndLaddersGame {
             }
         };
         ConsoleLogger msgLogger = new ConsoleLogger();
-        new SnakesAndLaddersGame(new RandomDice(), msgLogger, new GameBoard(snakesBoardPositions, ladderBoardPositions, msgLogger), new BoardGameController()).beginGamePlay();
+        PlayerGroup playerGroup = new PlayerGroup(
+                new Player(1, "one"),
+                new Player(2, "two"),
+                new Player(3, "three"),
+                new Player(4, "four")
+        );
+        new SnakesAndLaddersGame(new RandomDice(), msgLogger, new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger), new BoardGameController()).beginGamePlay();
     }
 
     public void beginGamePlay() {
-        int playerOnePosition = 0, playerTwoPosition = 0, playerThreePosition = 0, playerFourPosition = 0;
+        Player currentPlayer, nextPlayer = null;
 
         //continue to play the game until it is over
         while (true) {
+            currentPlayer = gameBoard.currentPlayer();
+            gameBoard.moveToNextPlayer();
+            nextPlayer = gameBoard.currentPlayer();
 
             int newHopCount = rollDice();
-            logMessage("Player " + activePlayer + " got dice roll of " + newHopCount);
+            logMessage("Player " + currentPlayer.getNumber() + " got dice roll of " + newHopCount);
 
-            if (activePlayer == 1) {
-                String currentPlayerNum = "one";
-                int nextPlayerNum = 2;
-                String nextPlayerNumStr = "two";
-                playerOnePosition = takeTurn(playerOnePosition, newHopCount, currentPlayerNum).nextPosition();
-                passTurnToNextPlayer(playerOnePosition, currentPlayerNum, nextPlayerNum, nextPlayerNumStr);
-            } else if (activePlayer == 2) {
-                String currentPlayerNum = "two";
-                int nextPlayerNum = 3;
-                String nextPlayerNumStr = "three";
-                playerTwoPosition = takeTurn(playerTwoPosition, newHopCount, currentPlayerNum).nextPosition();
-                passTurnToNextPlayer(playerTwoPosition, currentPlayerNum, nextPlayerNum, nextPlayerNumStr);
-            } else if (activePlayer == 3) {
-                String currentPlayerNum = "three";
-                int nextPlayerNum = 4;
-                String nextPlayerNumStr = "four";
-                playerThreePosition = takeTurn(playerThreePosition, newHopCount, currentPlayerNum).nextPosition();
-                passTurnToNextPlayer(playerThreePosition, currentPlayerNum, nextPlayerNum, nextPlayerNumStr);
-            } else if (activePlayer == 4) {
-                String currentPlayerNum = "four";
-                int nextPlayerNum = 1;
-                String nextPlayerNumStr = "one";
-                playerFourPosition = takeTurn(playerFourPosition, newHopCount, currentPlayerNum).nextPosition();
-                passTurnToNextPlayer(playerFourPosition, currentPlayerNum, nextPlayerNum, nextPlayerNumStr);
-            }
-
+            String currentPlayerNum = currentPlayer.getName();
+            int nextPlayerNum = nextPlayer.getNumber();
+            String nextPlayerNumStr = nextPlayer.getName();
+            currentPlayer.setPosition(takeTurn(currentPlayer.getPosition(), newHopCount, currentPlayerNum).nextPosition());
+            passTurnToNextPlayer(currentPlayer.getPosition(), currentPlayerNum, nextPlayerNum, nextPlayerNumStr);
         }
     }
 
@@ -120,7 +105,6 @@ public class SnakesAndLaddersGame {
 
     private void passTurnToNextPlayer(int playerCurrentPosition, String currentPlayerNum, int nextPlayerNum, String nextPlayerNumStr) {
         logMessage("Next position for player " + currentPlayerNum + " is " + playerCurrentPosition);
-        this.activePlayer = nextPlayerNum;
         logMessage("Player " + nextPlayerNumStr + " will play next turn");
     }
 

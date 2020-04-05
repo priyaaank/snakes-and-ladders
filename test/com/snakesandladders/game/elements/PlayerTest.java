@@ -20,5 +20,22 @@ class PlayerTest {
         assertEquals("one", playerOne.getName());
     }
 
+    @Test
+    void shouldHaveZeroAsTheDefaultPosition() {
+        Player playerOne = new Player(1, "one");
 
+        assertEquals(0, playerOne.getPosition());
+    }
+
+    @Test
+    void shouldBeAbleToStorePosition() {
+        //given
+        Player playerOne = new Player(1, "one");
+
+        //when
+        playerOne.setPosition(28);
+
+        //then
+        assertEquals(28, playerOne.getPosition());
+    }
 }

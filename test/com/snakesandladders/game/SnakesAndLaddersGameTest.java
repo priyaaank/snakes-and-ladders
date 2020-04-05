@@ -1,6 +1,8 @@
 package com.snakesandladders.game;
 
 import com.snakesandladders.game.elements.GameBoard;
+import com.snakesandladders.game.elements.Player;
+import com.snakesandladders.game.elements.PlayerGroup;
 import com.snakesandladders.game.elements.RollBehavior;
 import com.snakesandladders.game.io.Logger;
 import com.snakesandladders.game.state.BoardGameEvents;
@@ -13,6 +15,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class SnakesAndLaddersGameTest {
 
     private SnakesAndLaddersGame snakesAndLaddersGame;
+    private Player playerOne = new Player(1, "one");
+    private Player playerTwo = new Player(2, "two");
+    private Player playerThree = new Player(3, "three");
+    private Player playerFour = new Player(4, "four");
     private Map<Integer, Integer> snakesBoardPositions = new HashMap<Integer, Integer>() {
         {
             put(18, 2);
@@ -48,7 +54,8 @@ public class SnakesAndLaddersGameTest {
         ProgrammableDice dice = new ProgrammableDice(1, 6, 5, 4, 6, 1, 2, 4, 6, 1, 2, 6, 3, 3, 2, 4, 3, 2, 6, 4, 6, 5, 3, 4, 4, 6, 4, 2, 5, 6, 6, 2, 6, 5, 4, 1, 3, 6, 6, 1, 3, 5, 1, 2, 6, 4, 3, 1, 2, 1, 4, 2, 5);
         InMemoryLogger msgLogger = new InMemoryLogger();
         BoardGameController controller = new BoardGameController();
-        snakesAndLaddersGame = new SnakesAndLaddersGame(dice, msgLogger, new GameBoard(snakesBoardPositions, ladderBoardPositions, msgLogger), controller);
+        PlayerGroup playerGroup = new PlayerGroup(playerOne, playerTwo, playerThree, playerFour);
+        snakesAndLaddersGame = new SnakesAndLaddersGame(dice, msgLogger, new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger), controller);
 
         try {
             //when
