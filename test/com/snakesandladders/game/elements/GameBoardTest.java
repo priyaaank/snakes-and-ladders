@@ -13,8 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class GameBoardTest {
 
     private GameBoard gameBoard;
-    private Player playerOne = new Player(1, "one");
-    private Player playerTwo = new Player(2, "two");
+    private Player playerOne = new Player(1, "one", new RandomDice());
+    private Player playerTwo = new Player(2, "two", new RandomDice());
 
     private Map<Integer, Integer> snakesBoardPositions = new HashMap<Integer, Integer>() {
         {

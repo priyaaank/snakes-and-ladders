@@ -15,8 +15,8 @@ class PlayerGroupTest {
 
     @BeforeEach
     void setUp() {
-        playerOne = new Player(1, "one");
-        playerTwo = new Player(2, "two");
+        playerOne = new Player(1, "one", new RandomDice());
+        playerTwo = new Player(2, "two", new RandomDice());
         playerGroup = new PlayerGroup(playerOne, playerTwo);
     }
 

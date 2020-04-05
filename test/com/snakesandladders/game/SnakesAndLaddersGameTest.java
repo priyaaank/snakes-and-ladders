@@ -3,22 +3,25 @@ package com.snakesandladders.game;
 import com.snakesandladders.game.elements.GameBoard;
 import com.snakesandladders.game.elements.Player;
 import com.snakesandladders.game.elements.PlayerGroup;
-import com.snakesandladders.game.elements.RollBehavior;
+import com.snakesandladders.game.elements.ProgrammableDice;
 import com.snakesandladders.game.io.Logger;
 import com.snakesandladders.game.state.BoardGameEvents;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SnakesAndLaddersGameTest {
 
     private SnakesAndLaddersGame snakesAndLaddersGame;
-    private Player playerOne = new Player(1, "one");
-    private Player playerTwo = new Player(2, "two");
-    private Player playerThree = new Player(3, "three");
-    private Player playerFour = new Player(4, "four");
+    private Player playerOne;
+    private Player playerTwo;
+    private Player playerThree;
+    private Player playerFour;
     private Map<Integer, Integer> snakesBoardPositions = new HashMap<Integer, Integer>() {
         {
             put(18, 2);
@@ -48,10 +51,15 @@ public class SnakesAndLaddersGameTest {
     };
 
 
+
     @Test
     void shouldFinishOneRoundOfGamePlaySuccessfully() {
         //given
         ProgrammableDice dice = new ProgrammableDice(1, 6, 5, 4, 6, 1, 2, 4, 6, 1, 2, 6, 3, 3, 2, 4, 3, 2, 6, 4, 6, 5, 3, 4, 4, 6, 4, 2, 5, 6, 6, 2, 6, 5, 4, 1, 3, 6, 6, 1, 3, 5, 1, 2, 6, 4, 3, 1, 2, 1, 4, 2, 5);
+        playerOne = new Player(1, "one", dice);
+        playerTwo = new Player(2, "two", dice);
+        playerThree = new Player(3, "three", dice);
+        playerFour = new Player(4, "four", dice);
         InMemoryLogger msgLogger = new InMemoryLogger();
         BoardGameController controller = new BoardGameController();
         PlayerGroup playerGroup = new PlayerGroup(playerOne, playerTwo, playerThree, playerFour);
@@ -99,20 +107,4 @@ public class SnakesAndLaddersGameTest {
         }
     }
 
-    class ProgrammableDice implements RollBehavior {
-
-        private int rollIndex;
-        private List<Integer> rollValues;
-
-        ProgrammableDice(Integer... rollNumbers) {
-            this.rollValues = Arrays.asList(rollNumbers);
-            this.rollIndex = 0;
-        }
-
-        @Override
-        public Integer roll() {
-            assert rollIndex < rollValues.size();
-            return rollValues.get(rollIndex++);
-        }
-    }
 }

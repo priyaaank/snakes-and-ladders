@@ -53,13 +53,14 @@ public class SnakesAndLaddersGame {
             }
         };
         ConsoleLogger msgLogger = new ConsoleLogger();
+        RollBehavior dice = new RandomDice();
         PlayerGroup playerGroup = new PlayerGroup(
-                new Player(1, "one"),
-                new Player(2, "two"),
-                new Player(3, "three"),
-                new Player(4, "four")
+                new Player(1, "one", dice),
+                new Player(2, "two", dice),
+                new Player(3, "three", dice),
+                new Player(4, "four", dice)
         );
-        new SnakesAndLaddersGame(new RandomDice(), msgLogger, new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger), new BoardGameController()).beginGamePlay();
+        new SnakesAndLaddersGame(dice, msgLogger, new GameBoard(snakesBoardPositions, ladderBoardPositions, playerGroup, msgLogger), new BoardGameController()).beginGamePlay();
     }
 
     public void beginGamePlay() {
