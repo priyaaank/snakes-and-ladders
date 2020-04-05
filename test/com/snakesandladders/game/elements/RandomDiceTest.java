@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RandomDiceTest {
 
@@ -26,7 +27,7 @@ class RandomDiceTest {
         diceThrows = throwDiceForCount(50);
 
         //then
-        assertEquals(6, diceThrows.size(), "Expected six different numbers. But were "+diceThrows.size());
+        assertEquals(6, diceThrows.size(), "Expected six different numbers. But were " + diceThrows.size());
     }
 
     @Test
@@ -38,7 +39,7 @@ class RandomDiceTest {
         diceThrows = throwDiceForCount(50);
 
         //then
-        for(Integer number : diceThrows.keySet()) {
+        for (Integer number : diceThrows.keySet()) {
             assertTrue(number < 7 && number > 0, "Dice roll was expected to be a number between 0 and 7. Was " + number);
         }
     }

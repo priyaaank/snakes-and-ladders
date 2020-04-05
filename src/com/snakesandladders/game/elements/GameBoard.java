@@ -19,12 +19,12 @@ public class GameBoard {
 
     public Turn evaluateTurn(Turn currentTurn) {
 
-        if(bittenBySnake(currentTurn.nextPosition())) {
+        if (bittenBySnake(currentTurn.nextPosition())) {
             messageLogger.log("Player got bit by snake a position " + currentTurn.nextPosition());
             return Turn.advanceTo(snakesBoardPositions.get(currentTurn.nextPosition()));
         }
 
-        if(chancedUponALadder(currentTurn.nextPosition())) {
+        if (chancedUponALadder(currentTurn.nextPosition())) {
             messageLogger.log("Player got chanced upon a ladder at position " + currentTurn.nextPosition() + "!");
             return Turn.advanceTo(ladderBoardPositions.get(currentTurn.nextPosition()));
         }

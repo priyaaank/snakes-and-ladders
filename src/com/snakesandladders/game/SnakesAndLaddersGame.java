@@ -1,10 +1,10 @@
 package com.snakesandladders.game;
 
 import com.snakesandladders.game.elements.GameBoard;
-import com.snakesandladders.game.io.ConsoleLogger;
-import com.snakesandladders.game.io.Logger;
 import com.snakesandladders.game.elements.RandomDice;
 import com.snakesandladders.game.elements.RollBehavior;
+import com.snakesandladders.game.io.ConsoleLogger;
+import com.snakesandladders.game.io.Logger;
 import com.snakesandladders.game.state.BoardGameController;
 import com.snakesandladders.game.state.BoardGameEvents;
 import com.snakesandladders.game.state.Turn;
@@ -56,7 +56,7 @@ public class SnakesAndLaddersGame {
             }
         };
         ConsoleLogger msgLogger = new ConsoleLogger();
-        new SnakesAndLaddersGame(new RandomDice(), msgLogger, new GameBoard(snakesBoardPositions,  ladderBoardPositions, msgLogger), new BoardGameController()).beginGamePlay();
+        new SnakesAndLaddersGame(new RandomDice(), msgLogger, new GameBoard(snakesBoardPositions, ladderBoardPositions, msgLogger), new BoardGameController()).beginGamePlay();
     }
 
     public void beginGamePlay() {

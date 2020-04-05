@@ -2,13 +2,13 @@ package com.snakesandladders.game.state;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TurnTest {
 
     @Test
     void shouldCalculateNextPositionBasedOnIndicatedAdvances() {
-        Turn currentTurn = Turn.advanceBy(3,3);
+        Turn currentTurn = Turn.advanceBy(3, 3);
 
         assertEquals(6, currentTurn.nextPosition());
     }

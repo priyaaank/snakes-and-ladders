@@ -1,8 +1,8 @@
 package com.snakesandladders.game;
 
 import com.snakesandladders.game.elements.GameBoard;
-import com.snakesandladders.game.io.Logger;
 import com.snakesandladders.game.elements.RollBehavior;
+import com.snakesandladders.game.io.Logger;
 import com.snakesandladders.game.state.BoardGameEvents;
 import org.junit.jupiter.api.Test;
 
