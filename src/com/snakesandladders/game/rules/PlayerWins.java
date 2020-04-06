@@ -8,6 +8,7 @@ public class PlayerWins implements GameRule {
     @Override
     public void evaluate(Player player, Turn turn, RuleEvaluationListener listener) {
         if (turn.hasReachedHundred()) {
+            player.declareWinner();
             listener.playerWon(player);
         }
     }

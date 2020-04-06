@@ -55,5 +55,4 @@ public class Player {
         return isWinner;
     }
 
-
 }

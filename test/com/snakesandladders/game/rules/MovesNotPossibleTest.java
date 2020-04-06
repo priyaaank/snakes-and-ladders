@@ -33,10 +33,11 @@ class MovesNotPossibleTest {
     }
 
     @Test
-    void shouldSkipTurnIfMovementNotPossible() {
+    void shouldCallSkipTurnCallbackWhenMovementNotPossible() {
         playerOne.updatePosition(Turn.advanceTo(98));
         hopsNotPossibleRule.evaluate(playerOne, Turn.advanceBy(98, 3), callbackRecorder);
 
         assertTrue(callbackRecorder.isSkipTurnCallbackCalled());
     }
+
 }

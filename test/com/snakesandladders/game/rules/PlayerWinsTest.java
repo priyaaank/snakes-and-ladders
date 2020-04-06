@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class PlayerHadWonRuleTest {
+class PlayerWinsTest {
 
     private PlayerWins playerWinsRule;
     private Player playerOne;
@@ -25,7 +25,7 @@ class PlayerHadWonRuleTest {
     }
 
     @Test
-    void shouldIndicateThatPlayerHasWonWhenItReachedHundred() {
+    void shouldCallPlayerWinsCallbackWhenPlayerWins() {
         playerWinsRule.evaluate(playerOne, Turn.advanceTo(100), callbackRecorder);
 
         assertTrue(callbackRecorder.isPlayerWonCallbackCalled());
@@ -38,4 +38,10 @@ class PlayerHadWonRuleTest {
         assertFalse(callbackRecorder.isPlayerWonCallbackCalled());
     }
 
+    @Test
+    void shouldMarkPlayerAsWinnerWhenPlayerWins() {
+        playerWinsRule.evaluate(playerOne, Turn.advanceTo(100), callbackRecorder);
+
+        assertTrue(playerOne.isWinner());
+    }
 }
