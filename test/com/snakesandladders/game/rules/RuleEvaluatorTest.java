@@ -3,19 +3,21 @@ package com.snakesandladders.game.rules;
 import com.snakesandladders.game.elements.Player;
 import com.snakesandladders.game.elements.RandomDice;
 import com.snakesandladders.game.io.ConsoleLogger;
+import com.snakesandladders.game.state.CallbackRecorder;
 import com.snakesandladders.game.state.Turn;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RuleEvaluatorTest {
 
     private RuleEvaluator ruleEvaluator;
     private HashMap<Integer, Integer> snakePositions;
     private HashMap<Integer, Integer> ladderPositions;
+    private CallbackRecorder callbackRecorder;
     private Player playerOne;
 
     @BeforeEach
@@ -34,92 +36,55 @@ class RuleEvaluatorTest {
         };
 
         ruleEvaluator = new RuleEvaluator(snakePositions, ladderPositions, new ConsoleLogger());
+        callbackRecorder = new CallbackRecorder();
     }
 
     @Test
     void shouldEvaluateRuleForDeclaringWinner() {
-        RuleEvaluationResult result = new RuleEvaluationResult();
-
         playerOne.updatePosition(Turn.advanceTo(99));
-        ruleEvaluator.evaluateRules(playerOne, Turn.advanceBy(99, 1), getRuleEvaluationListener(result));
+        ruleEvaluator.evaluateRules(playerOne, Turn.advanceBy(99, 1), callbackRecorder);
 
-        assertEquals("winner", result.evaluatedRuleName);
+        assertTrue(callbackRecorder.isPlayerWonCallbackCalled());
     }
 
     @Test
     void shouldEvaluateRuleForSnakeBite() {
-        RuleEvaluationResult result = new RuleEvaluationResult();
-
         playerOne.updatePosition(Turn.advanceTo(11));
-        ruleEvaluator.evaluateRules(playerOne, Turn.advanceBy(11, 1), getRuleEvaluationListener(result));
+        ruleEvaluator.evaluateRules(playerOne, Turn.advanceBy(11, 1), callbackRecorder);
 
-        assertEquals("updatedTurn", result.evaluatedRuleName);
+        assertTrue(callbackRecorder.isUpdateTurnCallBackCalled());
     }
 
     @Test
     void shouldEvaluateRuleForLadderClimb() {
-        RuleEvaluationResult result = new RuleEvaluationResult();
-
         playerOne.updatePosition(Turn.advanceTo(10));
-        ruleEvaluator.evaluateRules(playerOne, Turn.advanceBy(10, 3), getRuleEvaluationListener(result));
+        ruleEvaluator.evaluateRules(playerOne, Turn.advanceBy(10, 3), callbackRecorder);
 
-        assertEquals("updatedTurn", result.evaluatedRuleName);
+        assertTrue(callbackRecorder.isUpdateTurnCallBackCalled());
     }
 
     @Test
     void shouldEvaluateRuleForSkippingTurn() {
-        RuleEvaluationResult result = new RuleEvaluationResult();
-
         playerOne.updatePosition(Turn.advanceTo(99));
-        ruleEvaluator.evaluateRules(playerOne, Turn.advanceBy(99, 3), getRuleEvaluationListener(result));
+        ruleEvaluator.evaluateRules(playerOne, Turn.advanceBy(99, 3), callbackRecorder);
 
-        assertEquals("skipTurn", result.evaluatedRuleName);
+        assertTrue(callbackRecorder.isSkipTurnCallbackCalled());
     }
 
     @Test
     void shouldEvaluateRuleForYetToStart() {
-        RuleEvaluationResult result = new RuleEvaluationResult();
-
         playerOne.updatePosition(Turn.advanceTo(0));
-        ruleEvaluator.evaluateRules(playerOne, Turn.advanceBy(0, 3), getRuleEvaluationListener(result));
+        ruleEvaluator.evaluateRules(playerOne, Turn.advanceBy(0, 3), callbackRecorder);
 
-        assertEquals("yetToStart", result.evaluatedRuleName);
+        assertTrue(callbackRecorder.isYetToStartCallbackCalled());
     }
 
     @Test
     void shouldEvaluateDefaultRuleForSimpleMove() {
-        RuleEvaluationResult result = new RuleEvaluationResult();
-
         playerOne.updatePosition(Turn.advanceTo(22));
-        ruleEvaluator.evaluateRules(playerOne, Turn.advanceBy(22, 3), getRuleEvaluationListener(result));
+        ruleEvaluator.evaluateRules(playerOne, Turn.advanceBy(22, 3), callbackRecorder);
 
-        assertEquals("updatedTurn", result.evaluatedRuleName);
+        assertTrue(callbackRecorder.isUpdateTurnCallBackCalled());
     }
 
-    private static class RuleEvaluationResult {
-        String evaluatedRuleName = "NONE";
-    }
-
-    private RuleEvaluationListener getRuleEvaluationListener(RuleEvaluationResult result) {
-        return new RuleEvaluationListener() {
-
-            @Override
-            public void skipTurnFor(Player player) {
-                result.evaluatedRuleName = "skipTurn";
-            }
-
-            @Override
-            public void yetToStart(Player player) { result.evaluatedRuleName = "yetToStart"; }
-
-            @Override
-            public void playerWon(Player player) {
-                result.evaluatedRuleName = "winner";
-            }
-
-            @Override
-            public void updatedTurnFor(Player player, Turn turn) {
-                result.evaluatedRuleName = "updatedTurn";
-            }
-        };
-    }
 }

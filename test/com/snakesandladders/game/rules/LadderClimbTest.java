@@ -3,20 +3,20 @@ package com.snakesandladders.game.rules;
 import com.snakesandladders.game.elements.Player;
 import com.snakesandladders.game.elements.RandomDice;
 import com.snakesandladders.game.io.ConsoleLogger;
+import com.snakesandladders.game.state.CallbackRecorder;
 import com.snakesandladders.game.state.Turn;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LadderClimbTest {
 
     private LadderClimb ladderClimb;
     private Player playerOne;
+    private CallbackRecorder callbackRecorder;
 
     @BeforeEach
     void setUp() {
@@ -26,54 +26,23 @@ class LadderClimbTest {
             }
         }, new ConsoleLogger());
         this.playerOne = new Player(1, "one", new RandomDice(), new ConsoleLogger());
+        callbackRecorder = new CallbackRecorder();
     }
 
     @Test
     void shouldUpdatePlayerPositionWhenBittenBySnake() {
-        LadderClimbCall ladderClimbCall = new LadderClimbCall(FALSE);
+        this.ladderClimb.evaluate(playerOne, Turn.advanceTo(12), callbackRecorder);
 
-        this.ladderClimb.evaluate(playerOne, Turn.advanceTo(12), snakeBiteUpdater(ladderClimbCall));
-
-        assertTrue(ladderClimbCall.climbedLadder);
-        assertEquals(2, ladderClimbCall.newTurn.nextPosition());
+        assertTrue(callbackRecorder.isUpdateTurnCallBackCalled());
+        assertEquals(2, callbackRecorder.getUpdatedTurn().nextPosition());
     }
 
     @Test
     void shouldDoNothingWhenSnakeNotEncountered() {
-        LadderClimbCall ladderClimbCall = new LadderClimbCall(FALSE);
+        this.ladderClimb.evaluate(playerOne, Turn.advanceTo(2), callbackRecorder);
 
-        this.ladderClimb.evaluate(playerOne, Turn.advanceTo(2), snakeBiteUpdater(ladderClimbCall));
-
-        assertFalse(ladderClimbCall.climbedLadder);
-        assertNull(ladderClimbCall.newTurn);
-    }
-
-    private RuleEvaluationListener snakeBiteUpdater(LadderClimbCall ladderClimbCall) {
-        return new RuleEvaluationListener() {
-            @Override
-            public void skipTurnFor(Player player) { /* Do nothing */ }
-
-            @Override
-            public void yetToStart(Player player) { /* Do nothing */ }
-
-            @Override
-            public void playerWon(Player player) { /* Do nothing */ }
-
-            @Override
-            public void updatedTurnFor(Player player, Turn turn) {
-                ladderClimbCall.climbedLadder = TRUE;
-                ladderClimbCall.newTurn = turn;
-            }
-        };
-    }
-
-    private static class LadderClimbCall {
-        Boolean climbedLadder;
-        Turn newTurn;
-
-        public LadderClimbCall(Boolean climbedLadder) {
-            this.climbedLadder = climbedLadder;
-        }
+        assertFalse(callbackRecorder.isUpdateTurnCallBackCalled());
+        assertNull(callbackRecorder.getUpdatedTurn());
     }
 
 }

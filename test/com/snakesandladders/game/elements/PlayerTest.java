@@ -2,8 +2,8 @@ package com.snakesandladders.game.elements;
 
 import com.snakesandladders.game.io.ConsoleLogger;
 import com.snakesandladders.game.io.Logger;
-import com.snakesandladders.game.rules.RuleEvaluationListener;
 import com.snakesandladders.game.rules.RuleEvaluator;
+import com.snakesandladders.game.state.CallbackRecorder;
 import com.snakesandladders.game.state.Turn;
 import org.junit.jupiter.api.Test;
 
@@ -40,10 +40,12 @@ class PlayerTest {
 
     @Test
     void shouldBeAbleToRollDice() {
+        CallbackRecorder callbackRecorder = new CallbackRecorder();
+
         Player playerOne = new Player(1, "one", new ProgrammableDice(2), logger);
         playerOne.updatePosition(Turn.advanceTo(12));
 
-        playerOne.takeTurn(ruleEvaluator, getRuleEvaluationListener(playerOne));
+        playerOne.takeTurn(ruleEvaluator, callbackRecorder);
 
         assertEquals(14, playerOne.getPosition());
     }
@@ -57,27 +59,4 @@ class PlayerTest {
         assertEquals(6, playerOne.getPosition());
     }
 
-    private RuleEvaluationListener getRuleEvaluationListener(final Player playerToUpdate) {
-        return new RuleEvaluationListener() {
-            @Override
-            public void skipTurnFor(Player player) {
-
-            }
-
-            @Override
-            public void yetToStart(Player player) {
-
-            }
-
-            @Override
-            public void playerWon(Player player) {
-
-            }
-
-            @Override
-            public void updatedTurnFor(Player player, Turn turn) {
-                playerToUpdate.updatePosition(turn);
-            }
-        };
-    }
 }
