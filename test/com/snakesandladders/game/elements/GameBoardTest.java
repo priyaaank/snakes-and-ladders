@@ -2,7 +2,6 @@ package com.snakesandladders.game.elements;
 
 import com.snakesandladders.game.io.InMemoryLogger;
 import com.snakesandladders.game.rules.RuleEvaluator;
-import com.snakesandladders.game.state.Turn;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class GameBoardTest {
 
@@ -64,37 +62,4 @@ class GameBoardTest {
         assertEquals(playerTwo, gameBoard.currentPlayer());
     }
 
-    @Test
-    void shouldLogASkipTurnMessageForAPlayer() {
-        playerOne.updatePosition(Turn.advanceTo(3));
-
-        gameBoard.skipTurnFor(playerOne);
-
-        assertEquals("Player one needs to score exactly 97 on dice roll to win. Passing chance.", logger.getMessageAtPosition(0));
-    }
-
-    @Test
-    void shouldLogMessageWhenPlayerWins() {
-        playerOne.updatePosition(Turn.advanceTo(100));
-
-        gameBoard.playerWon(playerOne);
-
-        assertEquals("Player one wins! Game finished.", logger.getMessageAtPosition(0));
-    }
-
-    @Test
-    void shouldLogMessageForYetToStartPlayer() {
-        playerOne.updatePosition(Turn.advanceTo(0));
-
-        gameBoard.yetToStart(playerOne);
-
-        assertEquals("Player one did not score 6. First a 6 needs to be scored to start moving on board.", logger.getMessageAtPosition(0));
-    }
-
-    @Test
-    void shouldIndicateWhenGameHasFinished() {
-        gameBoard.playerWon(playerOne);
-
-        assertFalse(gameBoard.isGameInProgress());
-    }
 }

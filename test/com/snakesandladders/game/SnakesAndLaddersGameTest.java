@@ -6,6 +6,7 @@ import com.snakesandladders.game.elements.PlayerGroup;
 import com.snakesandladders.game.elements.ProgrammableDice;
 import com.snakesandladders.game.io.InMemoryLogger;
 import com.snakesandladders.game.rules.RuleEvaluator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -47,22 +48,26 @@ public class SnakesAndLaddersGameTest {
             put(63, 88);
         }
     };
+    private InMemoryLogger msgLogger;
+    private ProgrammableDice dice;
 
-    @Test
-    void shouldFinishOneRoundOfGamePlaySuccessfully() {
-        //given
-        InMemoryLogger msgLogger = new InMemoryLogger();
-        ProgrammableDice dice = new ProgrammableDice(1, 6, 5, 4, 6, 1, 2, 4, 6, 1, 2, 6, 3, 3, 2, 4, 3, 2, 6, 4, 6, 5, 3, 4, 4, 6, 4, 2, 5, 6, 6, 2, 6, 5, 4, 1, 3, 6, 6, 1, 3, 5, 1, 2, 6, 4, 3, 1, 2, 1, 4, 2, 5);
+    @BeforeEach
+    void setUp() {
+        msgLogger = new InMemoryLogger();
+        dice = new ProgrammableDice(1, 6, 5, 4, 6, 1, 2, 4, 6, 1, 2, 6, 3, 3, 2, 4, 3, 2, 6, 4, 6, 5, 3, 4, 4, 6, 4, 2, 5, 6, 6, 2, 6, 5, 4, 1, 3, 6, 6, 1, 3, 5, 1, 2, 6, 4, 3, 1, 2, 1, 4, 2, 5);
         playerOne = new Player(1, "one", dice, msgLogger);
         playerTwo = new Player(2, "two", dice, msgLogger);
         playerThree = new Player(3, "three", dice, msgLogger);
         playerFour = new Player(4, "four", dice, msgLogger);
         PlayerGroup playerGroup = new PlayerGroup(playerOne, playerTwo, playerThree, playerFour);
-        snakesAndLaddersGame = new SnakesAndLaddersGame(new GameBoard(playerGroup, msgLogger, new RuleEvaluator(snakesBoardPositions, ladderBoardPositions, msgLogger)));
 
+        snakesAndLaddersGame = new SnakesAndLaddersGame(new GameBoard(playerGroup, msgLogger, new RuleEvaluator(snakesBoardPositions, ladderBoardPositions, msgLogger)), msgLogger);
+    }
+
+    @Test
+    void shouldFinishOneRoundOfGamePlaySuccessfully() {
         snakesAndLaddersGame.beginGamePlay();
 
-        //then
         assertEquals("Player 2 got dice roll of 6", msgLogger.getMessageAtPosition(4));
         assertEquals("Player 1 got dice roll of 6", msgLogger.getMessageAtPosition(15));
         assertEquals("Player 4 got dice roll of 6", msgLogger.getMessageAtPosition(40));
@@ -70,4 +75,24 @@ public class SnakesAndLaddersGameTest {
         assertEquals("Player one wins! Game finished.", msgLogger.getMessageAtPosition(172));
     }
 
+    @Test
+    void shouldLogMessageWhenTurnSkipped() {
+        snakesAndLaddersGame.skipTurnFor(new Player(1, "one", dice, msgLogger));
+
+        assertEquals("Player one needs to score exactly 100 on dice roll to win. Passing chance.", msgLogger.getMessageAtPosition(0));
+    }
+
+    @Test
+    void shouldLogMessageWhenPlayerYetToStart() {
+        snakesAndLaddersGame.yetToStart(new Player(1, "one", dice, msgLogger));
+
+        assertEquals("Player one did not score 6. First a 6 needs to be scored to start moving on board.", msgLogger.getMessageAtPosition(0));
+    }
+
+    @Test
+    void shouldLogMessageWhenPlayerWins() {
+        snakesAndLaddersGame.playerWon(new Player(1, "one", dice, msgLogger));
+
+        assertEquals("Player one wins! Game finished.", msgLogger.getMessageAtPosition(0));
+    }
 }

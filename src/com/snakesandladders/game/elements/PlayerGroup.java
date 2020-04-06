@@ -41,6 +41,7 @@ public class PlayerGroup {
         Node<T> curr;
         Integer size = 0;
 
+        @SafeVarargs
         CircularLinkedList(T... elements) {
             Node<T> currNode, prevNode = null;
 

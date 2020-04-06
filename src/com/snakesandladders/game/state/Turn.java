@@ -5,6 +5,7 @@ import static java.lang.Boolean.FALSE;
 public class Turn {
 
     private static final int NO_HOPS = 0;
+    private static final int WINNING_POSITION = 100;
     private int currentPosition;
     private Integer hopCount;
 
@@ -35,6 +36,10 @@ public class Turn {
     }
 
     public boolean hasReachedHundred() {
-        return (this.currentPosition + this.hopCount) == 100;
+        return (this.currentPosition + this.hopCount) == WINNING_POSITION;
+    }
+
+    public boolean goingBeyondWinninPosition() {
+        return nextPosition() > WINNING_POSITION;
     }
 }

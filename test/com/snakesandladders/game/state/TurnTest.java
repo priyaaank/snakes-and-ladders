@@ -68,4 +68,18 @@ class TurnTest {
 
         assertFalse(currentTurn.hasReachedHundred());
     }
+
+    @Test
+    void shouldBeTrueIfNextPositionIsBeyondHundred() {
+        Turn turn = Turn.advanceBy(99, 2);
+
+        assertTrue(turn.goingBeyondWinninPosition());
+    }
+
+    @Test
+    void shouldBeFalseIfNextPositionIsWithinHundred() {
+        Turn turn = Turn.advanceBy(99, 1);
+
+        assertFalse(turn.goingBeyondWinninPosition());
+    }
 }

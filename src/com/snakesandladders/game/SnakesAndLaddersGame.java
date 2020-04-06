@@ -2,19 +2,21 @@ package com.snakesandladders.game;
 
 import com.snakesandladders.game.elements.*;
 import com.snakesandladders.game.io.ConsoleLogger;
+import com.snakesandladders.game.io.Logger;
+import com.snakesandladders.game.rules.RuleEvaluationListener;
 import com.snakesandladders.game.rules.RuleEvaluator;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SnakesAndLaddersGame {
+public class SnakesAndLaddersGame implements RuleEvaluationListener {
 
     private GameBoard gameBoard;
-    private Boolean isGameInProgress;
+    private Logger msgLogger;
 
-    public SnakesAndLaddersGame(GameBoard gameBoard) {
+    public SnakesAndLaddersGame(GameBoard gameBoard, Logger msgLogger) {
         this.gameBoard = gameBoard;
-        this.isGameInProgress = Boolean.TRUE;
+        this.msgLogger = msgLogger;
     }
 
     public static void main(String[] args) {
@@ -57,14 +59,38 @@ public class SnakesAndLaddersGame {
         );
 
         new SnakesAndLaddersGame(
-                new GameBoard(playerGroup, msgLogger, new RuleEvaluator(snakesBoardPositions, ladderBoardPositions, msgLogger))
+                new GameBoard(playerGroup, msgLogger, new RuleEvaluator(snakesBoardPositions, ladderBoardPositions, msgLogger)),
+                msgLogger
         ).beginGamePlay();
     }
 
     public void beginGamePlay() {
-        while (gameBoard.isGameInProgress()) {
-            gameBoard.takeTurn();
+        Player currentPlayer;
+        do {
+            currentPlayer = gameBoard.currentPlayer();
+            gameBoard.takeTurn(this);
             gameBoard.moveToNextPlayer();
-        }
+        } while (!currentPlayer.isWinner());
+
+    }
+
+    @Override
+    public void skipTurnFor(Player player) {
+        msgLogger.log("Player " + player.getName() + " needs to score exactly " + (100 - player.getPosition()) + " on dice roll to win. Passing chance.");
+    }
+
+    @Override
+    public void yetToStart(Player player) {
+        msgLogger.log("Player " + player.getName() + " did not score 6. First a 6 needs to be scored to start moving on board.");
+    }
+
+    @Override
+    public void playerWon(Player player) {
+        msgLogger.log("Player " + player.getName() + " wins! Game finished.");
+    }
+
+    @Override
+    public void updatedTurnFor(Player player) {
+        //do nothing
     }
 }
