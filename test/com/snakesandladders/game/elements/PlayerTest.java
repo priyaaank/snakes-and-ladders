@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
 
@@ -40,7 +40,12 @@ class PlayerTest {
 
     @Test
     void shouldBeAbleToRollDice() {
-        CallbackRecorder callbackRecorder = new CallbackRecorder();
+        CallbackRecorder callbackRecorder = new CallbackRecorder() {
+            @Override
+            public void updatedTurnFor(Player player, Turn turn) {
+                player.updatePosition(turn);
+            }
+        };
 
         Player playerOne = new Player(1, "one", new ProgrammableDice(2), logger);
         playerOne.updatePosition(Turn.advanceTo(12));
@@ -59,4 +64,19 @@ class PlayerTest {
         assertEquals(6, playerOne.getPosition());
     }
 
+    @Test
+    void shouldNotBeAWinnerByDefault() {
+        Player playerOne = new Player(1, "one", new ProgrammableDice(2), logger);
+
+        assertFalse(playerOne.isWinner());
+    }
+
+    @Test
+    void shouldBeAbleToDeclarePlayerAsWinner() {
+        Player playerOne = new Player(1, "one", new ProgrammableDice(2), logger);
+
+        playerOne.declareWinner();
+
+        assertTrue(playerOne.isWinner());
+    }
 }
