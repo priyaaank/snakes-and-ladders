@@ -14,12 +14,7 @@ public class SnakesAndLaddersGame implements RuleEvaluationListener {
     private GameBoard gameBoard;
     private Logger msgLogger;
 
-    public SnakesAndLaddersGame(GameBoard gameBoard, Logger msgLogger) {
-        this.gameBoard = gameBoard;
-        this.msgLogger = msgLogger;
-    }
-
-    public static void main(String[] args) {
+    public SnakesAndLaddersGame() {
         Map<Integer, Integer> snakesBoardPositions = new HashMap<Integer, Integer>() {
             {
                 put(18, 2);
@@ -48,7 +43,7 @@ public class SnakesAndLaddersGame implements RuleEvaluationListener {
             }
         };
 
-        ConsoleLogger msgLogger = new ConsoleLogger();
+        msgLogger = new ConsoleLogger();
         RollBehavior dice = new RandomDice();
 
         PlayerGroup playerGroup = new PlayerGroup(
@@ -58,10 +53,16 @@ public class SnakesAndLaddersGame implements RuleEvaluationListener {
                 new Player(4, "four", dice, msgLogger)
         );
 
-        new SnakesAndLaddersGame(
-                new GameBoard(playerGroup, msgLogger, new RuleEvaluator(snakesBoardPositions, ladderBoardPositions, msgLogger)),
-                msgLogger
-        ).beginGamePlay();
+        gameBoard = new GameBoard(playerGroup, msgLogger, new RuleEvaluator(snakesBoardPositions, ladderBoardPositions, msgLogger));
+    }
+
+    public SnakesAndLaddersGame(GameBoard gameBoard, Logger msgLogger) {
+        this.gameBoard = gameBoard;
+        this.msgLogger = msgLogger;
+    }
+
+    public static void main(String[] args) {
+        new SnakesAndLaddersGame().beginGamePlay();
     }
 
     public void beginGamePlay() {
@@ -71,7 +72,6 @@ public class SnakesAndLaddersGame implements RuleEvaluationListener {
             gameBoard.takeTurn(this);
             gameBoard.moveToNextPlayer();
         } while (!currentPlayer.isWinner());
-
     }
 
     @Override
