@@ -5,6 +5,7 @@ import com.snakesandladders.game.io.Logger;
 import com.snakesandladders.game.rules.RuleEvaluator;
 import com.snakesandladders.game.state.CallbackRecorder;
 import com.snakesandladders.game.state.Turn;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -14,8 +15,16 @@ import static org.junit.jupiter.api.Assertions.*;
 class PlayerTest {
 
     private Logger logger = new ConsoleLogger();
-    private final HashMap<Integer, Integer> emptySnakeAndLadderPositions = new HashMap<>();
-    private RuleEvaluator ruleEvaluator = new RuleEvaluator(emptySnakeAndLadderPositions, emptySnakeAndLadderPositions, logger);
+    private HashMap<Integer, Integer> emptySnakeAndLadderPositions;
+    private RuleEvaluator ruleEvaluator;
+    private CallbackRecorder callbackRecorder;
+
+    @BeforeEach
+    void setUp() {
+        emptySnakeAndLadderPositions = new HashMap<>();
+        ruleEvaluator = new RuleEvaluator(emptySnakeAndLadderPositions, emptySnakeAndLadderPositions, logger);
+        callbackRecorder = new CallbackRecorder();
+    }
 
     @Test
     void shouldBeAbleToGivePlayerNumber() {
@@ -40,19 +49,12 @@ class PlayerTest {
 
     @Test
     void shouldBeAbleToRollDice() {
-        CallbackRecorder callbackRecorder = new CallbackRecorder() {
-            @Override
-            public void updatedTurnFor(Player player, Turn turn) {
-                player.updatePosition(turn);
-            }
-        };
-
         Player playerOne = new Player(1, "one", new ProgrammableDice(2), logger);
         playerOne.updatePosition(Turn.advanceTo(12));
 
         playerOne.takeTurn(ruleEvaluator, callbackRecorder);
 
-        assertEquals(14, playerOne.getPosition());
+        assertEquals(14, callbackRecorder.getPlayer().getPosition());
     }
 
     @Test
@@ -79,4 +81,5 @@ class PlayerTest {
 
         assertTrue(playerOne.isWinner());
     }
+    
 }

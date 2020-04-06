@@ -26,10 +26,18 @@ class SimpleMoveTest {
 
     @Test
     void shouldUpdateTurnBasedOnRolledNumber() {
+        playerOne.updatePosition(Turn.advanceTo(23));
+        this.simpleMove.evaluate(playerOne, Turn.advanceBy(23, 2), callbackRecorder);
+
+        assertEquals(25, callbackRecorder.getPlayer().getPosition());
+    }
+
+    @Test
+    void shouldTriggerUpdatePositionCallback() {
+        playerOne.updatePosition(Turn.advanceTo(23));
         this.simpleMove.evaluate(playerOne, Turn.advanceBy(23, 2), callbackRecorder);
 
         assertTrue(callbackRecorder.isUpdateTurnCallBackCalled());
-        assertEquals(25, callbackRecorder.getUpdatedTurn().nextPosition());
     }
     
 }

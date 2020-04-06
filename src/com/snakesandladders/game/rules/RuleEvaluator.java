@@ -56,9 +56,9 @@ public class RuleEvaluator {
             }
 
             @Override
-            public void updatedTurnFor(Player player, Turn turn) {
+            public void updatedTurnFor(Player player) {
                 evaluationInterrupter.terminateEvaluation = TRUE;
-                listener.updatedTurnFor(player, turn);
+                listener.updatedTurnFor(player);
             }
         };
     }

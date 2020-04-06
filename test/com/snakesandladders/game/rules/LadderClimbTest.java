@@ -22,7 +22,7 @@ class LadderClimbTest {
     void setUp() {
         this.ladderClimb = new LadderClimb(new HashMap<Integer, Integer>() {
             {
-                put(12, 2);
+                put(12, 28);
             }
         }, new ConsoleLogger());
         this.playerOne = new Player(1, "one", new RandomDice(), new ConsoleLogger());
@@ -30,19 +30,26 @@ class LadderClimbTest {
     }
 
     @Test
-    void shouldUpdatePlayerPositionWhenBittenBySnake() {
+    void shouldTriggerUpdateTurnEventWhenClimbingLadder() {
         this.ladderClimb.evaluate(playerOne, Turn.advanceTo(12), callbackRecorder);
 
         assertTrue(callbackRecorder.isUpdateTurnCallBackCalled());
-        assertEquals(2, callbackRecorder.getUpdatedTurn().nextPosition());
+        assertEquals(28, callbackRecorder.getPlayer().getPosition());
     }
 
     @Test
-    void shouldDoNothingWhenSnakeNotEncountered() {
+    void shouldUpdatePlayerPositionWhenClimbingLadder() {
+        this.ladderClimb.evaluate(playerOne, Turn.advanceTo(12), callbackRecorder);
+
+        assertEquals(28, this.playerOne.getPosition());
+    }
+
+    @Test
+    void shouldDoNothingWhenLadderNotEncountered() {
         this.ladderClimb.evaluate(playerOne, Turn.advanceTo(2), callbackRecorder);
 
         assertFalse(callbackRecorder.isUpdateTurnCallBackCalled());
-        assertNull(callbackRecorder.getUpdatedTurn());
+        assertNull(callbackRecorder.getPlayer());
     }
 
 }

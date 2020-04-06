@@ -33,8 +33,14 @@ class SnakeBiteTest {
     void shouldUpdatePlayerPositionWhenBittenBySnake() {
         this.snakeBite.evaluate(playerOne, Turn.advanceTo(12), callbackRecorder);
 
+        assertEquals(2, callbackRecorder.getPlayer().getPosition());
+    }
+
+    @Test
+    void shouldTriggerUpdatePositionCallbackWhenBittenBySnake() {
+        this.snakeBite.evaluate(playerOne, Turn.advanceTo(12), callbackRecorder);
+
         assertTrue(callbackRecorder.isUpdateTurnCallBackCalled());
-        assertEquals(2, callbackRecorder.getUpdatedTurn().nextPosition());
     }
 
     @Test
@@ -42,7 +48,7 @@ class SnakeBiteTest {
         this.snakeBite.evaluate(playerOne, Turn.advanceTo(2), callbackRecorder);
 
         assertFalse(callbackRecorder.isUpdateTurnCallBackCalled());
-        assertNull(callbackRecorder.getUpdatedTurn());
+        assertNull(callbackRecorder.getPlayer());
     }
 
 }

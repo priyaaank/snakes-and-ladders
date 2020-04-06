@@ -20,7 +20,8 @@ public class LadderClimb implements GameRule {
     public void evaluate(Player player, Turn turn, RuleEvaluationListener listener) {
         if (ladderPositions.get(turn.nextPosition()) != null) {
             logger.log("Player got chanced upon a ladder at position " + turn.nextPosition() + "!");
-            listener.updatedTurnFor(player, Turn.advanceTo(ladderPositions.get(turn.nextPosition())));
+            player.updatePosition(Turn.advanceTo(ladderPositions.get(turn.nextPosition())));
+            listener.updatedTurnFor(player);
         }
     }
 }

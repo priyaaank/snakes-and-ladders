@@ -20,7 +20,8 @@ public class SnakeBite implements GameRule {
     public void evaluate(Player player, Turn turn, RuleEvaluationListener listener) {
         if (snakePositions.get(turn.nextPosition()) != null) {
             logger.log("Player got bit by snake a position " + turn.nextPosition());
-            listener.updatedTurnFor(player, Turn.advanceTo(snakePositions.get(turn.nextPosition())));
+            player.updatePosition(Turn.advanceTo(snakePositions.get(turn.nextPosition())));
+            listener.updatedTurnFor(player);
         }
     }
 }

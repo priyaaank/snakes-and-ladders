@@ -54,4 +54,6 @@ public class Player {
     public boolean isWinner() {
         return isWinner;
     }
+
+
 }

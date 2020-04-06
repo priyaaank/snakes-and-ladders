@@ -1,7 +1,5 @@
 package com.snakesandladders.game.io;
 
-import com.snakesandladders.game.io.Logger;
-
 import java.util.ArrayList;
 import java.util.List;
 

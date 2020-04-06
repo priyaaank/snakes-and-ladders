@@ -1,7 +1,6 @@
 package com.snakesandladders.game.rules;
 
 import com.snakesandladders.game.elements.Player;
-import com.snakesandladders.game.state.Turn;
 
 public interface RuleEvaluationListener {
 
@@ -11,5 +10,5 @@ public interface RuleEvaluationListener {
 
     void playerWon(Player player);
 
-    void updatedTurnFor(Player player, Turn turn);
+    void updatedTurnFor(Player player);
 }

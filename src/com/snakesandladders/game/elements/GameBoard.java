@@ -52,8 +52,8 @@ public class GameBoard implements RuleEvaluationListener {
     }
 
     @Override
-    public void updatedTurnFor(Player player, Turn turn) {
-        player.updatePosition(turn);
+    public void updatedTurnFor(Player player) {
+        //do nothing
     }
 
     public Boolean isGameInProgress() {

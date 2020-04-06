@@ -74,15 +74,6 @@ class GameBoardTest {
     }
 
     @Test
-    void shouldUpdatePlayerPositionWithTurn() {
-        playerOne.updatePosition(Turn.advanceTo(3));
-
-        gameBoard.updatedTurnFor(playerOne, Turn.advanceBy(3, 4));
-
-        assertEquals(7, playerOne.getPosition());
-    }
-
-    @Test
     void shouldLogMessageWhenPlayerWins() {
         playerOne.updatePosition(Turn.advanceTo(100));
 

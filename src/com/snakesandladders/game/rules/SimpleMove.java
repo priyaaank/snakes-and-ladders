@@ -7,7 +7,8 @@ public class SimpleMove implements GameRule {
 
     @Override
     public void evaluate(Player player, Turn turn, RuleEvaluationListener listener) {
-        listener.updatedTurnFor(player, turn);
+        player.updatePosition(turn);
+        listener.updatedTurnFor(player);
     }
 
 }
